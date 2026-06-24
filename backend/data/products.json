@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1",
+    "name": "Mecedora",
+    "price": "$20,000",
+    "image": "/uploads/placeholder.jpg",
+    "images": ["/uploads/placeholder.jpg", "/uploads/placeholder.jpg", "/uploads/placeholder.jpg"],
+    "info": "Una mecedora artesanal hecha a mano con madera de roble.",
+    "material": "Madera de roble",
+    "dimensiones": "60cm x 80cm x 100cm",
+    "featured": true,
+    "createdAt": "2024-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "name": "Silla",
+    "price": "$15,000",
+    "image": "/uploads/placeholder.jpg",
+    "images": ["/uploads/placeholder.jpg", "/uploads/placeholder.jpg", "/uploads/placeholder.jpg"],
+    "info": "Silla cómoda y resistente ideal para comedor.",
+    "material": "Madera de pino y tela",
+    "dimensiones": "45cm x 50cm x 90cm",
+    "featured": true,
+    "createdAt": "2024-01-02T00:00:00.000Z"
+  },
+  {
+    "id": "3",
+    "name": "Butaca",
+    "price": "$25,000",
+    "image": "/uploads/placeholder.jpg",
+    "images": ["/uploads/placeholder.jpg", "/uploads/placeholder.jpg", "/uploads/placeholder.jpg"],
+    "info": "Butaca elegante y confortable para sala de estar.",
+    "material": "Madera de nogal y cuero",
+    "dimensiones": "80cm x 85cm x 95cm",
+    "featured": false,
+    "createdAt": "2024-01-03T00:00:00.000Z"
+  }
+]
