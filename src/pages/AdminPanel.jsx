@@ -53,6 +53,7 @@ function AdminLogin({ onLogin }) {
 
 // ─── Product Form Modal ───────────────────────────────────
 function ProductForm({ product, onSave, onCancel }) {
+  const { API } = useData();
   const [form, setForm] = useState({
     name: product?.name || "",
     price: product?.price || "",
@@ -63,6 +64,15 @@ function ProductForm({ product, onSave, onCancel }) {
   });
   const [mainImage, setMainImage] = useState(null);
   const [extraImages, setExtraImages] = useState([]);
+  
+  const [colorIcon1, setColorIcon1] = useState(null);
+  const [colorIcon2, setColorIcon2] = useState(null);
+  const [colorIcon3, setColorIcon3] = useState(null);
+
+  const [colorImage1, setColorImage1] = useState(null);
+  const [colorImage2, setColorImage2] = useState(null);
+  const [colorImage3, setColorImage3] = useState(null);
+
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -82,6 +92,14 @@ function ProductForm({ product, onSave, onCancel }) {
     Object.entries(form).forEach(([k, v]) => fd.append(k, v));
     if (mainImage) fd.append("image", mainImage);
     extraImages.forEach((img) => fd.append("images", img));
+
+    if (colorIcon1) fd.append("colorIcon1", colorIcon1);
+    if (colorIcon2) fd.append("colorIcon2", colorIcon2);
+    if (colorIcon3) fd.append("colorIcon3", colorIcon3);
+
+    if (colorImage1) fd.append("colorImage1", colorImage1);
+    if (colorImage2) fd.append("colorImage2", colorImage2);
+    if (colorImage3) fd.append("colorImage3", colorImage3);
 
     const result = await onSave(fd);
     if (!result.ok) setError(result.message || "Error al guardar");
@@ -127,6 +145,61 @@ function ProductForm({ product, onSave, onCancel }) {
           <div>
             <label>Imágenes adicionales (carrusel)</label>
             <input type="file" accept="image/*" multiple onChange={(e) => setExtraImages([...e.target.files])} />
+          </div>
+
+          <div className="admin-colors-section">
+            <h4>Variantes de Color (Hasta 3)</h4>
+            <div className="admin-colors-grid">
+              {[0, 1, 2].map((idx) => {
+                const color = product?.colors?.[idx];
+                const setIcon = [setColorIcon1, setColorIcon2, setColorIcon3][idx];
+                const setImage = [setColorImage1, setColorImage2, setColorImage3][idx];
+                const iconVal = [colorIcon1, colorIcon2, colorIcon3][idx];
+                const imageVal = [colorImage1, colorImage2, colorImage3][idx];
+                return (
+                  <div key={idx} className="admin-color-col">
+                    <h5>Color {idx + 1}</h5>
+                    
+                    {color && (
+                      <div className="admin-existing-color-previews">
+                        {color.icon && (
+                          <div className="admin-existing-color-preview-item">
+                            <span>Icono:</span>
+                            <img src={`${API}${color.icon}`} alt={`Icono ${idx+1}`} />
+                          </div>
+                        )}
+                        {color.image && (
+                          <div className="admin-existing-color-preview-item">
+                            <span>Imagen:</span>
+                            <img src={`${API}${color.image}`} alt={`Producto ${idx+1}`} />
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    <div className="admin-file-input-group">
+                      <label>Icono de color</label>
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        onChange={(e) => setIcon(e.target.files[0])} 
+                      />
+                      {iconVal && <span className="file-selected">✓ {iconVal.name}</span>}
+                    </div>
+
+                    <div className="admin-file-input-group">
+                      <label>Imagen del producto</label>
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        onChange={(e) => setImage(e.target.files[0])} 
+                      />
+                      {imageVal && <span className="file-selected">✓ {imageVal.name}</span>}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           {error && <p style={{ color: "var(--clr-error)", fontSize: "0.85rem" }}>⚠ {error}</p>}

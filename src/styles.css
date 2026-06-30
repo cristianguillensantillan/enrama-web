@@ -1955,3 +1955,175 @@ button {
     transform: rotate(360deg);
   }
 }
+
+/* ═══════════════════════════════════════════════════════
+   PRODUCT COLOR VARIANTS
+   - Display circular color swatches in product details modal
+   - Admin upload layout for color swatches
+═══════════════════════════════════════════════════════ */
+
+/* Modal Swatches */
+.modal-colors-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 12px 0 4px 0;
+}
+
+.modal-colors-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--clr-earth);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modal-colors-list {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.modal-color-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--clr-tan);
+  padding: 2px;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: all var(--transition);
+}
+
+.modal-color-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--clr-accent);
+}
+
+.modal-color-btn.active {
+  border: 2px solid var(--clr-accent);
+  box-shadow: 0 0 0 3px rgba(166, 124, 82, 0.2);
+}
+
+.modal-color-btn img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.color-placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--clr-tan);
+}
+
+/* Admin Panel Color Swatch Forms */
+.admin-colors-section {
+  border-top: 1px solid var(--clr-sand);
+  margin-top: 24px;
+  padding-top: 20px;
+}
+
+.admin-colors-section h4 {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  color: var(--clr-bark);
+  margin-bottom: 16px;
+}
+
+.admin-colors-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.admin-color-col {
+  background: var(--clr-cream);
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--clr-sand);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-color-col h5 {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  color: var(--clr-dark);
+  border-bottom: 1px solid var(--clr-sand);
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+
+.admin-file-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-file-input-group label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--clr-earth);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.admin-file-input-group input[type="file"] {
+  font-size: 0.8rem;
+  padding: 4px;
+  border: 1px dashed var(--clr-tan);
+  background: white;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.admin-file-input-group .file-selected {
+  font-size: 0.75rem;
+  color: var(--clr-success);
+  margin-top: 2px;
+  font-weight: 500;
+}
+
+.admin-existing-color-previews {
+  display: flex;
+  gap: 12px;
+  background: white;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--clr-sand);
+}
+
+.admin-existing-color-preview-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.admin-existing-color-preview-item span {
+  font-size: 0.65rem;
+  color: var(--clr-earth);
+}
+
+.admin-existing-color-preview-item img {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid var(--clr-sand);
+}
+
+@media (max-width: 600px) {
+  .admin-colors-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}

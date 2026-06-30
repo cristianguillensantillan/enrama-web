@@ -91,6 +91,12 @@ app.get("/api/products", (req, res) => {
 app.post("/api/products", requireAdmin, upload.fields([
   { name: "image", maxCount: 1 },
   { name: "images", maxCount: 10 },
+  { name: "colorIcon1", maxCount: 1 },
+  { name: "colorIcon2", maxCount: 1 },
+  { name: "colorIcon3", maxCount: 1 },
+  { name: "colorImage1", maxCount: 1 },
+  { name: "colorImage2", maxCount: 1 },
+  { name: "colorImage3", maxCount: 1 },
 ]), (req, res) => {
   try {
     const products = readJSON("products.json");
@@ -98,6 +104,19 @@ app.post("/api/products", requireAdmin, upload.fields([
       ? `/uploads/${req.files.image[0].filename}`
       : "/uploads/placeholder.jpg";
     const extraImages = req.files?.images?.map((f) => `/uploads/${f.filename}`) || [mainImage];
+
+    const colorIcon1 = req.files?.colorIcon1?.[0]?.filename ? `/uploads/${req.files.colorIcon1[0].filename}` : null;
+    const colorIcon2 = req.files?.colorIcon2?.[0]?.filename ? `/uploads/${req.files.colorIcon2[0].filename}` : null;
+    const colorIcon3 = req.files?.colorIcon3?.[0]?.filename ? `/uploads/${req.files.colorIcon3[0].filename}` : null;
+
+    const colorImage1 = req.files?.colorImage1?.[0]?.filename ? `/uploads/${req.files.colorImage1[0].filename}` : null;
+    const colorImage2 = req.files?.colorImage2?.[0]?.filename ? `/uploads/${req.files.colorImage2[0].filename}` : null;
+    const colorImage3 = req.files?.colorImage3?.[0]?.filename ? `/uploads/${req.files.colorImage3[0].filename}` : null;
+
+    const colors = [];
+    if (colorIcon1 || colorImage1) colors.push({ icon: colorIcon1, image: colorImage1 });
+    if (colorIcon2 || colorImage2) colors.push({ icon: colorIcon2, image: colorImage2 });
+    if (colorIcon3 || colorImage3) colors.push({ icon: colorIcon3, image: colorImage3 });
 
     const newProduct = {
       id: Date.now().toString(),
@@ -109,6 +128,7 @@ app.post("/api/products", requireAdmin, upload.fields([
       featured: req.body.featured === "true",
       image: mainImage,
       images: [mainImage, ...extraImages],
+      colors: colors,
       createdAt: new Date().toISOString(),
     };
     products.push(newProduct);
@@ -123,6 +143,12 @@ app.post("/api/products", requireAdmin, upload.fields([
 app.put("/api/products/:id", requireAdmin, upload.fields([
   { name: "image", maxCount: 1 },
   { name: "images", maxCount: 10 },
+  { name: "colorIcon1", maxCount: 1 },
+  { name: "colorIcon2", maxCount: 1 },
+  { name: "colorIcon3", maxCount: 1 },
+  { name: "colorImage1", maxCount: 1 },
+  { name: "colorImage2", maxCount: 1 },
+  { name: "colorImage3", maxCount: 1 },
 ]), (req, res) => {
   try {
     const products = readJSON("products.json");
@@ -130,12 +156,27 @@ app.put("/api/products/:id", requireAdmin, upload.fields([
     if (idx === -1) return res.status(404).json({ message: "Producto no encontrado" });
 
     const existing = products[idx];
+    const existingColors = existing.colors || [];
+
     const mainImage = req.files?.image?.[0]?.filename
       ? `/uploads/${req.files.image[0].filename}`
       : existing.image;
     const extraImages = req.files?.images?.length
       ? req.files.images.map((f) => `/uploads/${f.filename}`)
       : existing.images;
+
+    const colorIcon1 = req.files?.colorIcon1?.[0]?.filename ? `/uploads/${req.files.colorIcon1[0].filename}` : (existingColors[0]?.icon || null);
+    const colorIcon2 = req.files?.colorIcon2?.[0]?.filename ? `/uploads/${req.files.colorIcon2[0].filename}` : (existingColors[1]?.icon || null);
+    const colorIcon3 = req.files?.colorIcon3?.[0]?.filename ? `/uploads/${req.files.colorIcon3[0].filename}` : (existingColors[2]?.icon || null);
+
+    const colorImage1 = req.files?.colorImage1?.[0]?.filename ? `/uploads/${req.files.colorImage1[0].filename}` : (existingColors[0]?.image || null);
+    const colorImage2 = req.files?.colorImage2?.[0]?.filename ? `/uploads/${req.files.colorImage2[0].filename}` : (existingColors[1]?.image || null);
+    const colorImage3 = req.files?.colorImage3?.[0]?.filename ? `/uploads/${req.files.colorImage3[0].filename}` : (existingColors[2]?.image || null);
+
+    const colors = [];
+    if (colorIcon1 || colorImage1) colors.push({ icon: colorIcon1, image: colorImage1 });
+    if (colorIcon2 || colorImage2) colors.push({ icon: colorIcon2, image: colorImage2 });
+    if (colorIcon3 || colorImage3) colors.push({ icon: colorIcon3, image: colorImage3 });
 
     products[idx] = {
       ...existing,
@@ -147,6 +188,7 @@ app.put("/api/products/:id", requireAdmin, upload.fields([
       featured: req.body.featured !== undefined ? req.body.featured === "true" : existing.featured,
       image: mainImage,
       images: extraImages,
+      colors: colors,
     };
     writeJSON("products.json", products);
     res.json(products[idx]);
