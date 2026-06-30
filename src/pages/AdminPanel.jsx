@@ -140,7 +140,7 @@ function ProductForm({ product, onSave, onCancel }) {
           </div>
 
           <div className="admin-colors-section">
-            <h4>Iconos de Colores Disponibles (Hasta 3)</h4>
+            <h4>Iconos de Maderas Disponibles (Hasta 3)</h4>
             <div className="admin-colors-grid">
               {[0, 1, 2].map((idx) => {
                 const getIconPath = (val) => {
@@ -153,7 +153,7 @@ function ProductForm({ product, onSave, onCancel }) {
                 const iconVal = [colorIcon1, colorIcon2, colorIcon3][idx];
                 return (
                   <div key={idx} className="admin-color-col">
-                    <h5>Color {idx + 1}</h5>
+                    <h5>Madera {idx + 1}</h5>
                     
                     {colorIconPath && (
                       <div className="admin-existing-color-previews">
@@ -165,7 +165,7 @@ function ProductForm({ product, onSave, onCancel }) {
                     )}
 
                     <div className="admin-file-input-group">
-                      <label>Icono de color</label>
+                      <label>Icono de madera</label>
                       <input 
                         type="file" 
                         accept="image/*" 

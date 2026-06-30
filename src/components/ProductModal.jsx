@@ -95,7 +95,7 @@ export default function ProductModal({ product, onClose, onOrder }) {
           {/* Color variant selectors */}
           {product.colors && product.colors.some(c => c) && (
             <div className="modal-colors-section">
-              <span className="modal-colors-label">Colores disponibles:</span>
+              <span className="modal-colors-label">Maderas:</span>
               <div className="modal-colors-list">
                 {product.colors.map((colorIcon, i) => {
                   const getIconPath = (val) => {
