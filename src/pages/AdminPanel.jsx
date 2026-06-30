@@ -516,8 +516,9 @@ function PostForm({ post, onSave, onCancel }) {
 
 // ─── Products Tab ─────────────────────────────────────────
 function ProductsTab() {
-  const { products, createProduct, updateProduct, deleteProduct, API } = useData();
+  const { products, createProduct, updateProduct, deleteProduct, reorderProducts, API } = useData();
   const [form, setForm] = useState(null); // null | 'new' | product object
+  const [isReordering, setIsReordering] = useState(false);
 
   const resolveImg = (src) => {
     if (!src) return null;
@@ -541,6 +542,38 @@ function ProductsTab() {
     if (window.confirm("¿Eliminar este producto?")) await deleteProduct(id);
   };
 
+  const handleMoveUp = async (index) => {
+    if (index === 0 || isReordering) return;
+    setIsReordering(true);
+    const newProducts = [...products];
+    const temp = newProducts[index];
+    newProducts[index] = newProducts[index - 1];
+    newProducts[index - 1] = temp;
+
+    const ids = newProducts.map((p) => p.id);
+    const res = await reorderProducts(ids);
+    if (!res.ok) {
+      alert("Error al reordenar productos: " + (res.message || "error desconocido"));
+    }
+    setIsReordering(false);
+  };
+
+  const handleMoveDown = async (index) => {
+    if (index === products.length - 1 || isReordering) return;
+    setIsReordering(true);
+    const newProducts = [...products];
+    const temp = newProducts[index];
+    newProducts[index] = newProducts[index + 1];
+    newProducts[index + 1] = temp;
+
+    const ids = newProducts.map((p) => p.id);
+    const res = await reorderProducts(ids);
+    if (!res.ok) {
+      alert("Error al reordenar productos: " + (res.message || "error desconocido"));
+    }
+    setIsReordering(false);
+  };
+
   return (
     <div>
       <div className="admin-section-header">
@@ -557,8 +590,33 @@ function ProductsTab() {
             <p>Agrega tu primer producto.</p>
           </div>
         )}
-        {products.map((p) => (
+        {products.map((p, index) => (
           <div key={p.id} className="admin-item">
+            <div className="admin-reorder-actions">
+              <button
+                type="button"
+                className="admin-reorder-btn"
+                title="Mover arriba"
+                onClick={() => handleMoveUp(index)}
+                disabled={index === 0 || isReordering}
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="m18 15-6-6-6 6"/>
+                </svg>
+              </button>
+              <button
+                type="button"
+                className="admin-reorder-btn"
+                title="Mover abajo"
+                onClick={() => handleMoveDown(index)}
+                disabled={index === products.length - 1 || isReordering}
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
+              </button>
+            </div>
+
             <img src={resolveImg(p.image)} alt={p.name} className="admin-item-img"
               onError={(e) => { e.target.style.background = "var(--clr-sand)"; e.target.src = ""; }} />
             <div className="admin-item-info">
@@ -663,7 +721,7 @@ function HomepageTab() {
   const { homepage, updateHomepage, API } = useData();
   const [form, setForm] = useState(null);
   const [heroImages, setHeroImages] = useState([]);
-  const [aboutImage, setAboutImage] = useState(null);
+  const [aboutImages, setAboutImages] = useState([]);
   const [logoFile, setLogoFile] = useState(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -700,7 +758,7 @@ function HomepageTab() {
     const fd = new FormData();
     Object.entries(form).forEach(([k, v]) => fd.append(k, v));
     heroImages.forEach((img) => fd.append("heroImages", img));
-    if (aboutImage) fd.append("aboutImage", aboutImage);
+    aboutImages.forEach((img) => fd.append("aboutImages", img));
     if (logoFile) fd.append("logo", logoFile);
     const r = await updateHomepage(fd);
     setSaving(false);
@@ -784,22 +842,23 @@ function HomepageTab() {
             <Field label="Contenido expandido" name="aboutReadMoreContent" rows={5} />
             <div style={{ marginTop: 16 }}>
               <label style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--clr-bark)", letterSpacing: "0.5px", textTransform: "uppercase", display: "block", marginBottom: 8 }}>
-                Imagen de la sección (reemplaza la actual)
+                Imágenes de la sección (reemplaza las actuales)
               </label>
-              {homepage?.about?.image && (
-                <div style={{ marginBottom: 8 }}>
-                  <span style={{ fontSize: "0.85rem", color: "var(--clr-bark-light)" }}>Imagen actual: </span>
-                  <a 
-                    href={`${API}${homepage.about.image}`} 
-                    target="_blank" 
-                    rel="noreferrer"
-                    style={{ fontSize: "0.85rem", color: "var(--clr-earth)", textDecoration: "underline" }}
-                  >
-                    Ver imagen
-                  </a>
+              {(homepage?.about?.images || (homepage?.about?.image ? [homepage.about.image] : [])).length > 0 && (
+                <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: 8 }}>
+                  {(homepage?.about?.images || (homepage?.about?.image ? [homepage.about.image] : [])).map((imgUrl, idx) => (
+                    <div key={idx} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                      <img 
+                        src={`${API}${imgUrl}`} 
+                        alt={`Sobre nosotros ${idx + 1}`} 
+                        style={{ width: "80px", height: "60px", objectFit: "cover", borderRadius: "4px", border: "1px solid var(--clr-sand)" }}
+                      />
+                      <span style={{ fontSize: "0.7rem", color: "var(--clr-bark-light)", marginTop: "2px" }}>#{idx + 1}</span>
+                    </div>
+                  ))}
                 </div>
               )}
-              <input type="file" accept="image/*" onChange={(e) => setAboutImage(e.target.files[0])} />
+              <input type="file" accept="image/*" multiple onChange={(e) => setAboutImages([...e.target.files])} />
             </div>
           </div>
         </div>

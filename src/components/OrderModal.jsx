@@ -5,7 +5,7 @@ export default function OrderModal({ product, onClose }) {
   const { sendOrder } = useData();
   const [status, setStatus] = useState("form"); // form | loading | success | error
   const [error, setError] = useState("");
-  
+
   const getWoodInfo = (val) => {
     if (!val) return null;
     if (typeof val === 'string') return null;
@@ -212,7 +212,7 @@ export default function OrderModal({ product, onClose }) {
                   value={form.cantidad}
                   onChange={handleChange}
                 >
-                  {[...Array(10)].map((_, i) => (
+                  {[...Array(50)].map((_, i) => (
                     <option key={i + 1} value={i + 1}>
                       {i + 1}
                     </option>
@@ -246,7 +246,7 @@ export default function OrderModal({ product, onClose }) {
                 <textarea
                   id="notas"
                   name="notas"
-                  placeholder="Medidas especiales, tono de acabado preferido, etc."
+                  placeholder="Escribe aquí alguna nota adicional."
                   value={form.notas}
                   onChange={handleChange}
                 />

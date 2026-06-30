@@ -88,6 +88,16 @@ export function DataProvider({ children }) {
     return { ok: false };
   };
 
+  const reorderProducts = async (ids) => {
+    const res = await fetch(`${API}/api/products/reorder`, {
+      method: "PUT",
+      headers: { ...authHeaders(), "Content-Type": "application/json" },
+      body: JSON.stringify({ ids }),
+    });
+    if (res.ok) { await fetchAll(); return { ok: true }; }
+    return { ok: false, message: (await res.json()).message };
+  };
+
   // ── Posts CRUD ──────────────────────────────────
   const createPost = async (formData) => {
     const res = await fetch(`${API}/api/posts`, {
@@ -154,7 +164,7 @@ export function DataProvider({ children }) {
     <DataContext.Provider value={{
       products, posts, homepage, loading, adminToken,
       login, logout,
-      createProduct, updateProduct, deleteProduct,
+      createProduct, updateProduct, deleteProduct, reorderProducts,
       createPost, updatePost, deletePost,
       updateHomepage,
       sendOrder, sendNewsletter,

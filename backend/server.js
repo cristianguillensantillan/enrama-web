@@ -141,6 +141,32 @@ app.post("/api/products", requireAdmin, upload.fields([
   }
 });
 
+app.put("/api/products/reorder", requireAdmin, (req, res) => {
+  try {
+    const { ids } = req.body;
+    if (!Array.isArray(ids)) {
+      return res.status(400).json({ message: "Se requiere un arreglo de IDs" });
+    }
+    const products = readJSON("products.json");
+    const ordered = [];
+    ids.forEach((id) => {
+      const p = products.find((prod) => prod.id === id);
+      if (p) ordered.push(p);
+    });
+    // Add any remaining products just in case
+    products.forEach((p) => {
+      if (!ordered.some((o) => o.id === p.id)) {
+        ordered.push(p);
+      }
+    });
+    writeJSON("products.json", ordered);
+    res.json(ordered);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error al reordenar productos" });
+  }
+});
+
 app.put("/api/products/:id", requireAdmin, upload.fields([
   { name: "image", maxCount: 1 },
   { name: "images", maxCount: 10 },
@@ -181,14 +207,14 @@ app.put("/api/products/:id", requireAdmin, upload.fields([
       return val.price || "";
     };
 
-    const colorIcon1 = req.files?.colorIcon1?.[0]?.filename 
-      ? `/uploads/${req.files.colorIcon1[0].filename}` 
+    const colorIcon1 = req.files?.colorIcon1?.[0]?.filename
+      ? `/uploads/${req.files.colorIcon1[0].filename}`
       : getExistingIcon(existingColors[0]);
-    const colorIcon2 = req.files?.colorIcon2?.[0]?.filename 
-      ? `/uploads/${req.files.colorIcon2[0].filename}` 
+    const colorIcon2 = req.files?.colorIcon2?.[0]?.filename
+      ? `/uploads/${req.files.colorIcon2[0].filename}`
       : getExistingIcon(existingColors[1]);
-    const colorIcon3 = req.files?.colorIcon3?.[0]?.filename 
-      ? `/uploads/${req.files.colorIcon3[0].filename}` 
+    const colorIcon3 = req.files?.colorIcon3?.[0]?.filename
+      ? `/uploads/${req.files.colorIcon3[0].filename}`
       : getExistingIcon(existingColors[2]);
 
     const woodName1 = req.body.woodName1 !== undefined ? req.body.woodName1 : getExistingName(existingColors[0]);
@@ -338,7 +364,7 @@ app.get("/api/homepage", (req, res) => {
 
 app.put("/api/homepage", requireAdmin, upload.fields([
   { name: "heroImages", maxCount: 5 },
-  { name: "aboutImage", maxCount: 1 },
+  { name: "aboutImages", maxCount: 10 },
   { name: "logo", maxCount: 1 },
 ]), (req, res) => {
   try {
@@ -347,9 +373,9 @@ app.put("/api/homepage", requireAdmin, upload.fields([
       ? req.files.heroImages.map((f) => `/uploads/${f.filename}`)
       : current.hero.images;
 
-    const aboutImage = req.files?.aboutImage?.[0]?.filename
-      ? `/uploads/${req.files.aboutImage[0].filename}`
-      : current.about?.image || "";
+    const aboutImages = req.files?.aboutImages?.length
+      ? req.files.aboutImages.map((f) => `/uploads/${f.filename}`)
+      : current.about?.images || (current.about?.image ? [current.about.image] : []);
 
     const logo = req.files?.logo?.[0]?.filename
       ? `/uploads/${req.files.logo[0].filename}`
@@ -369,7 +395,8 @@ app.put("/api/homepage", requireAdmin, upload.fields([
         body: req.body.aboutBody ?? current.about.body,
         readMoreText: req.body.aboutReadMoreText ?? current.about.readMoreText,
         readMoreContent: req.body.aboutReadMoreContent ?? current.about.readMoreContent,
-        image: aboutImage,
+        images: aboutImages,
+        image: aboutImages[0] || "",
       },
       newsletter: {
         title: req.body.newsletterTitle ?? current.newsletter.title,
@@ -440,9 +467,7 @@ app.post("/send-order", async (req, res) => {
           
           <!-- Header with Logo & Brand -->
           <div style="background-color: #1e1512; padding: 32px 24px; text-align: center; border-bottom: 3px solid #a67c52;">
-            ${logoUrl ? `
-              <img src="${logoUrl}" alt="enramá" style="height: 50px; width: auto; display: block; margin: 0 auto 12px; object-fit: contain;" />
-            ` : ""}
+            <img src="cid:enramalogo" alt="enramá" style="height: 50px; width: auto; display: block; margin: 0 auto 12px; object-fit: contain;" />
             <h1 style="color: #ffffff; font-size: 1.8rem; font-weight: normal; margin: 0; letter-spacing: 3px; text-transform: uppercase;">enramá</h1>
             <p style="color: #c9b9a7; font-size: 0.85rem; margin: 6px 0 0; letter-spacing: 1.5px; text-transform: uppercase;">Nueva Orden Recibida</p>
           </div>
@@ -493,6 +518,14 @@ app.post("/send-order", async (req, res) => {
         </div>
       </div>
     `,
+    attachments: [
+      {
+        filename: "enrama-logo.png",
+        path: path.join(__dirname, "../public/enrama-logo.png"),
+        cid: "enramalogo",
+        disposition: "inline"
+      }
+    ]
   };
 
   try {
@@ -510,9 +543,7 @@ app.post("/send-order", async (req, res) => {
               
               <!-- Header with Logo & Brand -->
               <div style="background-color: #1e1512; padding: 32px 24px; text-align: center; border-bottom: 3px solid #a67c52;">
-                ${logoUrl ? `
-                  <img src="${logoUrl}" alt="enramá" style="height: 50px; width: auto; display: block; margin: 0 auto 12px; object-fit: contain;" />
-                ` : ""}
+                <img src="cid:enramalogo" alt="enramá" style="height: 50px; width: auto; display: block; margin: 0 auto 12px; object-fit: contain;" />
                 <h1 style="color: #ffffff; font-size: 1.8rem; font-weight: normal; margin: 0; letter-spacing: 3px; text-transform: uppercase;">enramá</h1>
                 <p style="color: #c9b9a7; font-size: 0.85rem; margin: 6px 0 0; letter-spacing: 1.5px; text-transform: uppercase;">Artesanía tradicional del Cibao</p>
               </div>
@@ -591,6 +622,14 @@ app.post("/send-order", async (req, res) => {
             </div>
           </div>
         `,
+        attachments: [
+          {
+            filename: "enrama-logo.png",
+            path: path.join(__dirname, "../public/enrama-logo.png"),
+            cid: "enramalogo",
+            disposition: "inline"
+          }
+        ]
       };
       await transporter.sendMail(customerMail);
     }
