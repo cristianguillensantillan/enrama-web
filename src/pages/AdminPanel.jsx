@@ -69,6 +69,36 @@ function ProductForm({ product, onSave, onCancel }) {
   const [colorIcon2, setColorIcon2] = useState(null);
   const [colorIcon3, setColorIcon3] = useState(null);
 
+  const [woodName1, setWoodName1] = useState("");
+  const [woodName2, setWoodName2] = useState("");
+  const [woodName3, setWoodName3] = useState("");
+
+  const [woodPrice1, setWoodPrice1] = useState("");
+  const [woodPrice2, setWoodPrice2] = useState("");
+  const [woodPrice3, setWoodPrice3] = useState("");
+
+  useEffect(() => {
+    if (product?.colors) {
+      const getWoodName = (val) => {
+        if (!val) return "";
+        if (typeof val === 'string') return "";
+        return val.name || "";
+      };
+      const getWoodPrice = (val) => {
+        if (!val) return "";
+        if (typeof val === 'string') return "";
+        return val.price || "";
+      };
+      setWoodName1(getWoodName(product.colors[0]));
+      setWoodName2(getWoodName(product.colors[1]));
+      setWoodName3(getWoodName(product.colors[2]));
+
+      setWoodPrice1(getWoodPrice(product.colors[0]));
+      setWoodPrice2(getWoodPrice(product.colors[1]));
+      setWoodPrice3(getWoodPrice(product.colors[2]));
+    }
+  }, [product]);
+
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -93,6 +123,14 @@ function ProductForm({ product, onSave, onCancel }) {
     if (colorIcon2) fd.append("colorIcon2", colorIcon2);
     if (colorIcon3) fd.append("colorIcon3", colorIcon3);
 
+    fd.append("woodName1", woodName1);
+    fd.append("woodName2", woodName2);
+    fd.append("woodName3", woodName3);
+
+    fd.append("woodPrice1", woodPrice1);
+    fd.append("woodPrice2", woodPrice2);
+    fd.append("woodPrice3", woodPrice3);
+
     const result = await onSave(fd);
     if (!result.ok) setError(result.message || "Error al guardar");
     setSaving(false);
@@ -108,7 +146,7 @@ function ProductForm({ product, onSave, onCancel }) {
             <input name="name" value={form.name} onChange={handleChange} placeholder="Ej: Mecedora" />
           </div>
           <div>
-            <label>Precio *</label>
+            <label>Precio Base *</label>
             <input name="price" value={form.price} onChange={handleChange} placeholder="Ej: $20,000" />
           </div>
           <div>
@@ -151,6 +189,12 @@ function ProductForm({ product, onSave, onCancel }) {
                 const colorIconPath = getIconPath(product?.colors?.[idx]);
                 const setIcon = [setColorIcon1, setColorIcon2, setColorIcon3][idx];
                 const iconVal = [colorIcon1, colorIcon2, colorIcon3][idx];
+                
+                const nameVal = [woodName1, woodName2, woodName3][idx];
+                const setName = [setWoodName1, setWoodName2, setWoodName3][idx];
+                const priceVal = [woodPrice1, woodPrice2, woodPrice3][idx];
+                const setPrice = [setWoodPrice1, setWoodPrice2, setWoodPrice3][idx];
+
                 return (
                   <div key={idx} className="admin-color-col">
                     <h5>Madera {idx + 1}</h5>
@@ -172,6 +216,26 @@ function ProductForm({ product, onSave, onCancel }) {
                         onChange={(e) => setIcon(e.target.files[0])} 
                       />
                       {iconVal && <span className="file-selected">✓ {iconVal.name}</span>}
+                    </div>
+
+                    <div className="admin-file-input-group">
+                      <label>Nombre de la madera</label>
+                      <input 
+                        type="text" 
+                        placeholder="Ej: Roble"
+                        value={nameVal}
+                        onChange={(e) => setName(e.target.value)} 
+                      />
+                    </div>
+
+                    <div className="admin-file-input-group">
+                      <label>Precio de la madera</label>
+                      <input 
+                        type="text" 
+                        placeholder="Ej: $37,000.00"
+                        value={priceVal}
+                        onChange={(e) => setPrice(e.target.value)} 
+                      />
                     </div>
                   </div>
                 );

@@ -90,7 +90,7 @@ export default function ProductModal({ product, onClose, onOrder }) {
           </button>
 
           <h2>{product.name}</h2>
-          <p className="modal-price">{product.price}</p>
+          <p className="modal-price">Desde {product.price}</p>
 
           {/* Color variant selectors */}
           {product.colors && product.colors.some(c => c) && (
@@ -103,15 +103,25 @@ export default function ProductModal({ product, onClose, onOrder }) {
                     if (typeof val === 'string') return val;
                     return val.icon || null;
                   };
+                  const getWoodName = (val) => {
+                    if (!val || typeof val === 'string') return "";
+                    return val.name || "";
+                  };
                   const iconPath = getIconPath(colorIcon);
+                  const woodName = getWoodName(colorIcon);
                   if (!iconPath) return null;
                   return (
                     <div
                       key={i}
-                      className="modal-color-swatch"
-                      title={`Color ${i + 1}`}
+                      className="modal-wood-item"
                     >
-                      <img src={resolveImg(iconPath)} alt={`Color ${i + 1}`} />
+                      <div
+                        className="modal-color-swatch"
+                        title={woodName || `Madera ${i + 1}`}
+                      >
+                        <img src={resolveImg(iconPath)} alt={woodName || `Madera ${i + 1}`} />
+                      </div>
+                      {woodName && <span className="modal-wood-name">{woodName}</span>}
                     </div>
                   );
                 })}

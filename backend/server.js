@@ -106,7 +106,18 @@ app.post("/api/products", requireAdmin, upload.fields([
     const colorIcon2 = req.files?.colorIcon2?.[0]?.filename ? `/uploads/${req.files.colorIcon2[0].filename}` : null;
     const colorIcon3 = req.files?.colorIcon3?.[0]?.filename ? `/uploads/${req.files.colorIcon3[0].filename}` : null;
 
-    const colors = [colorIcon1, colorIcon2, colorIcon3];
+    const woodName1 = req.body.woodName1 || "";
+    const woodName2 = req.body.woodName2 || "";
+    const woodName3 = req.body.woodName3 || "";
+
+    const woodPrice1 = req.body.woodPrice1 || "";
+    const woodPrice2 = req.body.woodPrice2 || "";
+    const woodPrice3 = req.body.woodPrice3 || "";
+
+    const colors = [];
+    if (colorIcon1 || woodName1 || woodPrice1) colors.push({ icon: colorIcon1, name: woodName1, price: woodPrice1 });
+    if (colorIcon2 || woodName2 || woodPrice2) colors.push({ icon: colorIcon2, name: woodName2, price: woodPrice2 });
+    if (colorIcon3 || woodName3 || woodPrice3) colors.push({ icon: colorIcon3, name: woodName3, price: woodPrice3 });
 
     const newProduct = {
       id: Date.now().toString(),
@@ -158,6 +169,18 @@ app.put("/api/products/:id", requireAdmin, upload.fields([
       return val.icon || null;
     };
 
+    const getExistingName = (val) => {
+      if (!val) return "";
+      if (typeof val === 'string') return "";
+      return val.name || "";
+    };
+
+    const getExistingPrice = (val) => {
+      if (!val) return "";
+      if (typeof val === 'string') return "";
+      return val.price || "";
+    };
+
     const colorIcon1 = req.files?.colorIcon1?.[0]?.filename 
       ? `/uploads/${req.files.colorIcon1[0].filename}` 
       : getExistingIcon(existingColors[0]);
@@ -168,7 +191,18 @@ app.put("/api/products/:id", requireAdmin, upload.fields([
       ? `/uploads/${req.files.colorIcon3[0].filename}` 
       : getExistingIcon(existingColors[2]);
 
-    const colors = [colorIcon1, colorIcon2, colorIcon3];
+    const woodName1 = req.body.woodName1 !== undefined ? req.body.woodName1 : getExistingName(existingColors[0]);
+    const woodName2 = req.body.woodName2 !== undefined ? req.body.woodName2 : getExistingName(existingColors[1]);
+    const woodName3 = req.body.woodName3 !== undefined ? req.body.woodName3 : getExistingName(existingColors[2]);
+
+    const woodPrice1 = req.body.woodPrice1 !== undefined ? req.body.woodPrice1 : getExistingPrice(existingColors[0]);
+    const woodPrice2 = req.body.woodPrice2 !== undefined ? req.body.woodPrice2 : getExistingPrice(existingColors[1]);
+    const woodPrice3 = req.body.woodPrice3 !== undefined ? req.body.woodPrice3 : getExistingPrice(existingColors[2]);
+
+    const colors = [];
+    if (colorIcon1 || woodName1 || woodPrice1) colors.push({ icon: colorIcon1, name: woodName1, price: woodPrice1 });
+    if (colorIcon2 || woodName2 || woodPrice2) colors.push({ icon: colorIcon2, name: woodName2, price: woodPrice2 });
+    if (colorIcon3 || woodName3 || woodPrice3) colors.push({ icon: colorIcon3, name: woodName3, price: woodPrice3 });
 
     products[idx] = {
       ...existing,

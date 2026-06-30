@@ -54,7 +54,7 @@ export default function Home() {
                   </div>
                   <div className="product-card-body">
                     <h3>{product.name}</h3>
-                    <p className="product-price">{product.price}</p>
+                    <p className="product-price">Desde {product.price}</p>
                     <button
                       className="btn-order"
                       style={{ width: "100%" }}

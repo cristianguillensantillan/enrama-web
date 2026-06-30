@@ -27,7 +27,7 @@ export default function ProductCard({ product, onDetails, onOrder }) {
 
       <div className="product-card-body">
         <h3>{product.name}</h3>
-        <p className="product-price">{product.price}</p>
+        <p className="product-price">Desde {product.price}</p>
         <div className="product-card-actions">
           <button
             className="btn-details"

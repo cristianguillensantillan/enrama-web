@@ -5,6 +5,16 @@ export default function OrderModal({ product, onClose }) {
   const { sendOrder } = useData();
   const [status, setStatus] = useState("form"); // form | loading | success | error
   const [error, setError] = useState("");
+  
+  const getWoodInfo = (val) => {
+    if (!val) return null;
+    if (typeof val === 'string') return null;
+    if (val.name) return { icon: val.icon || null, name: val.name, price: val.price || product?.price };
+    return null;
+  };
+
+  const availableWoods = product?.colors?.map(getWoodInfo).filter(Boolean) || [];
+
   const [form, setForm] = useState({
     nombre: "",
     email: "",
@@ -14,7 +24,18 @@ export default function OrderModal({ product, onClose }) {
     notas: "",
     requiereTransporte: false,
     requiereFactura: false,
+    madera: "",
   });
+
+  useEffect(() => {
+    if (product) {
+      const defaultWood = product.colors?.map(val => {
+        if (val && typeof val === 'object' && val.name) return val.name;
+        return null;
+      }).filter(Boolean)[0] || "";
+      setForm(f => ({ ...f, madera: defaultWood }));
+    }
+  }, [product]);
 
   const handleKey = useCallback(
     (e) => { if (e.key === "Escape") onClose(); },
@@ -46,6 +67,9 @@ export default function OrderModal({ product, onClose }) {
     return null;
   };
 
+  const selectedWoodObj = availableWoods.find(w => w.name === form.madera);
+  const activePrice = selectedWoodObj?.price || product?.price;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const err = validate();
@@ -53,7 +77,13 @@ export default function OrderModal({ product, onClose }) {
     setError("");
     setStatus("loading");
 
-    const result = await sendOrder(product, form);
+    const orderedProduct = {
+      ...product,
+      name: form.madera ? `${product.name} (Madera: ${form.madera})` : product.name,
+      price: activePrice,
+    };
+
+    const result = await sendOrder(orderedProduct, form);
     if (result.ok) {
       setStatus("success");
     } else {
@@ -99,7 +129,7 @@ export default function OrderModal({ product, onClose }) {
             <h2>Ordenar producto</h2>
             <p className="order-product-name">
               Estás ordenando: <strong>{product.name}</strong> —{" "}
-              <strong style={{ color: "var(--clr-accent)" }}>{product.price}</strong>
+              <strong style={{ color: "var(--clr-accent)" }}>Desde {activePrice}</strong>
             </p>
 
             <form className="order-form" onSubmit={handleSubmit}>
@@ -151,6 +181,24 @@ export default function OrderModal({ product, onClose }) {
                 />
               </div>
 
+              {availableWoods.length > 0 && (
+                <div className="form-group">
+                  <label htmlFor="madera">Tipo de Madera *</label>
+                  <select
+                    id="madera"
+                    name="madera"
+                    value={form.madera}
+                    onChange={handleChange}
+                  >
+                    {availableWoods.map((wood, idx) => (
+                      <option key={idx} value={wood.name}>
+                        {wood.name} (Desde {wood.price || product.price})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
               <div className="form-group">
                 <label htmlFor="cantidad">Cantidad</label>
                 <select
@@ -193,7 +241,7 @@ export default function OrderModal({ product, onClose }) {
                 <textarea
                   id="notas"
                   name="notas"
-                  placeholder="Color preferido, medidas especiales, etc."
+                  placeholder="Medidas especiales, tono de acabado preferido, etc."
                   value={form.notas}
                   onChange={handleChange}
                 />

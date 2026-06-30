@@ -14,9 +14,21 @@
     "dimensiones": "100 cm x 93 cm x 63 cm",
     "featured": true,
     "colors": [
-      "/uploads/1782745768585-458064106.jpg",
-      "/uploads/1782746005852-816967170.jpg",
-      "/uploads/1782746016323-12301404.jpg"
+      {
+        "icon": "/uploads/1782745768585-458064106.jpg",
+        "name": "Roble",
+        "price": "$37,000.00"
+      },
+      {
+        "icon": "/uploads/1782746005852-816967170.jpg",
+        "name": "Caoba",
+        "price": "$43,000.00"
+      },
+      {
+        "icon": "/uploads/1782746016323-12301404.jpg",
+        "name": "Nogal",
+        "price": "$48,000.00"
+      }
     ],
     "createdAt": "2024-01-01T00:00:00.000Z"
   },
