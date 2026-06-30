@@ -10,13 +10,25 @@
       "/uploads/placeholder.jpg"
     ],
     "info": "Una mecedora artesanal hecha a mano con madera de roble.",
-    "material": "Madera de roble",
+    "material": "Jequitiba | Caoba | Roble",
     "dimensiones": "100 cm x 93 cm x 63 cm",
     "featured": true,
     "colors": [
-      "/uploads/1782840387959-889593484.png",
-      "/uploads/1782840387959-157359618.jpg",
-      "/uploads/1782840387963-993752862.jpeg"
+      {
+        "icon": "/uploads/1782855289874-612967194.jpg",
+        "name": "Jequitiba",
+        "price": "37,000.00"
+      },
+      {
+        "icon": "/uploads/1782855289878-678500331.jpg",
+        "name": "Caoba",
+        "price": "39,000.00"
+      },
+      {
+        "icon": "/uploads/1782855289880-660801362.jpg",
+        "name": "Roble",
+        "price": "41,000.00"
+      }
     ],
     "createdAt": "2024-01-01T00:00:00.000Z"
   },
@@ -31,14 +43,26 @@
       "/uploads/placeholder.jpg"
     ],
     "info": "Silla cómoda y resistente ideal para comedor.",
-    "material": "Roble",
+    "material": "Jequitiba | Caoba | Roble",
     "dimensiones": "45cm x 50cm x 90cm",
     "featured": true,
     "createdAt": "2024-01-02T00:00:00.000Z",
     "colors": [
-      null,
-      null,
-      null
+      {
+        "icon": "/uploads/1782855337580-107123151.jpg",
+        "name": "Jequitiva",
+        "price": "24,000.00"
+      },
+      {
+        "icon": "/uploads/1782855337582-828260946.jpg",
+        "name": "Caoba",
+        "price": "26,000.00"
+      },
+      {
+        "icon": "/uploads/1782855337583-950418620.jpg",
+        "name": "Roble",
+        "price": "28,000.00"
+      }
     ]
   },
   {
@@ -52,14 +76,26 @@
       "/uploads/placeholder.jpg"
     ],
     "info": "Butaca elegante y confortable para sala de estar.",
-    "material": "",
+    "material": "Jequitiba | Caoba | Roble",
     "dimensiones": "80cm x 85cm x 95cm",
     "featured": true,
     "createdAt": "2024-01-03T00:00:00.000Z",
     "colors": [
-      null,
-      null,
-      null
+      {
+        "icon": "/uploads/1782855388959-25766150.jpg",
+        "name": "Jequitiva",
+        "price": "32,000.00"
+      },
+      {
+        "icon": "/uploads/1782855388960-275869811.jpg",
+        "name": "Caoba",
+        "price": "34,000.00"
+      },
+      {
+        "icon": "/uploads/1782855388962-182981304.jpg",
+        "name": "Roble",
+        "price": "36,000.00"
+      }
     ]
   }
 ]
