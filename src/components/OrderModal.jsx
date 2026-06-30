@@ -131,6 +131,11 @@ export default function OrderModal({ product, onClose }) {
               Estás ordenando: <strong>{product.name}</strong> —{" "}
               <strong style={{ color: "var(--clr-accent)" }}>Desde {activePrice}</strong>
             </p>
+            {product.material && (
+              <p className="order-product-material" style={{ fontSize: "0.85rem", color: "var(--clr-earth)", marginTop: "-12px", marginBottom: "16px" }}>
+                Material base: <strong>{product.material}</strong>
+              </p>
+            )}
 
             <form className="order-form" onSubmit={handleSubmit}>
               <div className="form-group">

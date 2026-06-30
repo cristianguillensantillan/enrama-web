@@ -14,21 +14,9 @@
     "dimensiones": "100 cm x 93 cm x 63 cm",
     "featured": true,
     "colors": [
-      {
-        "icon": "/uploads/1782745768585-458064106.jpg",
-        "name": "Roble",
-        "price": "$37,000.00"
-      },
-      {
-        "icon": "/uploads/1782746005852-816967170.jpg",
-        "name": "Caoba",
-        "price": "$43,000.00"
-      },
-      {
-        "icon": "/uploads/1782746016323-12301404.jpg",
-        "name": "Nogal",
-        "price": "$48,000.00"
-      }
+      "/uploads/1782840387959-889593484.png",
+      "/uploads/1782840387959-157359618.jpg",
+      "/uploads/1782840387963-993752862.jpeg"
     ],
     "createdAt": "2024-01-01T00:00:00.000Z"
   },
@@ -46,7 +34,12 @@
     "material": "Roble",
     "dimensiones": "45cm x 50cm x 90cm",
     "featured": true,
-    "createdAt": "2024-01-02T00:00:00.000Z"
+    "createdAt": "2024-01-02T00:00:00.000Z",
+    "colors": [
+      null,
+      null,
+      null
+    ]
   },
   {
     "id": "3",
@@ -62,6 +55,11 @@
     "material": "",
     "dimensiones": "80cm x 85cm x 95cm",
     "featured": true,
-    "createdAt": "2024-01-03T00:00:00.000Z"
+    "createdAt": "2024-01-03T00:00:00.000Z",
+    "colors": [
+      null,
+      null,
+      null
+    ]
   }
 ]

@@ -96,6 +96,13 @@ function ProductForm({ product, onSave, onCancel }) {
       setWoodPrice1(getWoodPrice(product.colors[0]));
       setWoodPrice2(getWoodPrice(product.colors[1]));
       setWoodPrice3(getWoodPrice(product.colors[2]));
+    } else {
+      setWoodName1("");
+      setWoodName2("");
+      setWoodName3("");
+      setWoodPrice1("");
+      setWoodPrice2("");
+      setWoodPrice3("");
     }
   }, [product]);
 
