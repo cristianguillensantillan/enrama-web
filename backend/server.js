@@ -94,9 +94,6 @@ app.post("/api/products", requireAdmin, upload.fields([
   { name: "colorIcon1", maxCount: 1 },
   { name: "colorIcon2", maxCount: 1 },
   { name: "colorIcon3", maxCount: 1 },
-  { name: "colorImage1", maxCount: 1 },
-  { name: "colorImage2", maxCount: 1 },
-  { name: "colorImage3", maxCount: 1 },
 ]), (req, res) => {
   try {
     const products = readJSON("products.json");
@@ -109,14 +106,7 @@ app.post("/api/products", requireAdmin, upload.fields([
     const colorIcon2 = req.files?.colorIcon2?.[0]?.filename ? `/uploads/${req.files.colorIcon2[0].filename}` : null;
     const colorIcon3 = req.files?.colorIcon3?.[0]?.filename ? `/uploads/${req.files.colorIcon3[0].filename}` : null;
 
-    const colorImage1 = req.files?.colorImage1?.[0]?.filename ? `/uploads/${req.files.colorImage1[0].filename}` : null;
-    const colorImage2 = req.files?.colorImage2?.[0]?.filename ? `/uploads/${req.files.colorImage2[0].filename}` : null;
-    const colorImage3 = req.files?.colorImage3?.[0]?.filename ? `/uploads/${req.files.colorImage3[0].filename}` : null;
-
-    const colors = [];
-    if (colorIcon1 || colorImage1) colors.push({ icon: colorIcon1, image: colorImage1 });
-    if (colorIcon2 || colorImage2) colors.push({ icon: colorIcon2, image: colorImage2 });
-    if (colorIcon3 || colorImage3) colors.push({ icon: colorIcon3, image: colorImage3 });
+    const colors = [colorIcon1, colorIcon2, colorIcon3];
 
     const newProduct = {
       id: Date.now().toString(),
@@ -146,9 +136,6 @@ app.put("/api/products/:id", requireAdmin, upload.fields([
   { name: "colorIcon1", maxCount: 1 },
   { name: "colorIcon2", maxCount: 1 },
   { name: "colorIcon3", maxCount: 1 },
-  { name: "colorImage1", maxCount: 1 },
-  { name: "colorImage2", maxCount: 1 },
-  { name: "colorImage3", maxCount: 1 },
 ]), (req, res) => {
   try {
     const products = readJSON("products.json");
@@ -165,18 +152,23 @@ app.put("/api/products/:id", requireAdmin, upload.fields([
       ? req.files.images.map((f) => `/uploads/${f.filename}`)
       : existing.images;
 
-    const colorIcon1 = req.files?.colorIcon1?.[0]?.filename ? `/uploads/${req.files.colorIcon1[0].filename}` : (existingColors[0]?.icon || null);
-    const colorIcon2 = req.files?.colorIcon2?.[0]?.filename ? `/uploads/${req.files.colorIcon2[0].filename}` : (existingColors[1]?.icon || null);
-    const colorIcon3 = req.files?.colorIcon3?.[0]?.filename ? `/uploads/${req.files.colorIcon3[0].filename}` : (existingColors[2]?.icon || null);
+    const getExistingIcon = (val) => {
+      if (!val) return null;
+      if (typeof val === 'string') return val;
+      return val.icon || null;
+    };
 
-    const colorImage1 = req.files?.colorImage1?.[0]?.filename ? `/uploads/${req.files.colorImage1[0].filename}` : (existingColors[0]?.image || null);
-    const colorImage2 = req.files?.colorImage2?.[0]?.filename ? `/uploads/${req.files.colorImage2[0].filename}` : (existingColors[1]?.image || null);
-    const colorImage3 = req.files?.colorImage3?.[0]?.filename ? `/uploads/${req.files.colorImage3[0].filename}` : (existingColors[2]?.image || null);
+    const colorIcon1 = req.files?.colorIcon1?.[0]?.filename 
+      ? `/uploads/${req.files.colorIcon1[0].filename}` 
+      : getExistingIcon(existingColors[0]);
+    const colorIcon2 = req.files?.colorIcon2?.[0]?.filename 
+      ? `/uploads/${req.files.colorIcon2[0].filename}` 
+      : getExistingIcon(existingColors[1]);
+    const colorIcon3 = req.files?.colorIcon3?.[0]?.filename 
+      ? `/uploads/${req.files.colorIcon3[0].filename}` 
+      : getExistingIcon(existingColors[2]);
 
-    const colors = [];
-    if (colorIcon1 || colorImage1) colors.push({ icon: colorIcon1, image: colorImage1 });
-    if (colorIcon2 || colorImage2) colors.push({ icon: colorIcon2, image: colorImage2 });
-    if (colorIcon3 || colorImage3) colors.push({ icon: colorIcon3, image: colorImage3 });
+    const colors = [colorIcon1, colorIcon2, colorIcon3];
 
     products[idx] = {
       ...existing,

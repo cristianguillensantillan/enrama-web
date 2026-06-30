@@ -4,37 +4,22 @@ import { useData } from "../context/DataContext";
 export default function ProductModal({ product, onClose, onOrder }) {
   const { API } = useData();
   const [imgIdx, setImgIdx] = useState(0);
-  const [activeImgSrc, setActiveImgSrc] = useState(null);
 
   const images = product?.images?.length ? product.images : [product?.image];
 
+  // Reset carousel index when product changes
   useEffect(() => {
-    if (product) {
-      setActiveImgSrc(product.image || (product.images?.length ? product.images[0] : null));
-      setImgIdx(0);
-    }
+    setImgIdx(0);
   }, [product]);
 
   // Keyboard navigation
   const handleKey = useCallback(
     (e) => {
       if (e.key === "Escape") onClose();
-      if (e.key === "ArrowRight") {
-        setImgIdx((p) => {
-          const next = (p + 1) % images.length;
-          setActiveImgSrc(images[next]);
-          return next;
-        });
-      }
-      if (e.key === "ArrowLeft") {
-        setImgIdx((p) => {
-          const prev = p === 0 ? images.length - 1 : p - 1;
-          setActiveImgSrc(images[prev]);
-          return prev;
-        });
-      }
+      if (e.key === "ArrowRight") setImgIdx((p) => (p + 1) % images.length);
+      if (e.key === "ArrowLeft") setImgIdx((p) => (p === 0 ? images.length - 1 : p - 1));
     },
-    [onClose, images]
+    [onClose, images.length]
   );
 
   useEffect(() => {
@@ -54,24 +39,13 @@ export default function ProductModal({ product, onClose, onOrder }) {
     return `${API}${src}`;
   };
 
-  const handleColorSelect = (colorImg) => {
-    if (!colorImg) return;
-    setActiveImgSrc(colorImg);
-    const idx = images.indexOf(colorImg);
-    if (idx !== -1) {
-      setImgIdx(idx);
-    } else {
-      setImgIdx(-1);
-    }
-  };
-
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-box" onClick={(e) => e.stopPropagation()}>
         {/* Left: Image carousel */}
         <div className="modal-carousel">
           <img
-            src={resolveImg(activeImgSrc || images[imgIdx])}
+            src={resolveImg(images[imgIdx])}
             alt={product.name}
             className="modal-carousel-img"
             onError={(e) => { e.target.src = ""; e.target.style.background = "var(--clr-sand)"; }}
@@ -82,26 +56,14 @@ export default function ProductModal({ product, onClose, onOrder }) {
               <div className="carousel-nav">
                 <button
                   className="carousel-btn"
-                  onClick={() => {
-                    setImgIdx((p) => {
-                      const prev = p === 0 ? images.length - 1 : p - 1;
-                      setActiveImgSrc(images[prev]);
-                      return prev;
-                    });
-                  }}
+                  onClick={() => setImgIdx((p) => (p === 0 ? images.length - 1 : p - 1))}
                   aria-label="Imagen anterior"
                 >
                   ‹
                 </button>
                 <button
                   className="carousel-btn"
-                  onClick={() => {
-                    setImgIdx((p) => {
-                      const next = (p + 1) % images.length;
-                      setActiveImgSrc(images[next]);
-                      return next;
-                    });
-                  }}
+                  onClick={() => setImgIdx((p) => (p + 1) % images.length)}
                   aria-label="Siguiente imagen"
                 >
                   ›
@@ -112,10 +74,7 @@ export default function ProductModal({ product, onClose, onOrder }) {
                   <button
                     key={i}
                     className={`carousel-dot ${i === imgIdx ? "active" : ""}`}
-                    onClick={() => {
-                      setImgIdx(i);
-                      setActiveImgSrc(images[i]);
-                    }}
+                    onClick={() => setImgIdx(i)}
                     aria-label={`Imagen ${i + 1}`}
                   />
                 ))}
@@ -134,24 +93,28 @@ export default function ProductModal({ product, onClose, onOrder }) {
           <p className="modal-price">{product.price}</p>
 
           {/* Color variant selectors */}
-          {product.colors && product.colors.length > 0 && (
+          {product.colors && product.colors.some(c => c) && (
             <div className="modal-colors-section">
               <span className="modal-colors-label">Colores disponibles:</span>
               <div className="modal-colors-list">
-                {product.colors.map((color, i) => (
-                  <button
-                    key={i}
-                    className={`modal-color-btn ${activeImgSrc === color.image ? "active" : ""}`}
-                    onClick={() => handleColorSelect(color.image)}
-                    title={`Color ${i + 1}`}
-                  >
-                    {color.icon ? (
-                      <img src={resolveImg(color.icon)} alt={`Color ${i + 1}`} />
-                    ) : (
-                      <span className="color-placeholder" />
-                    )}
-                  </button>
-                ))}
+                {product.colors.map((colorIcon, i) => {
+                  const getIconPath = (val) => {
+                    if (!val) return null;
+                    if (typeof val === 'string') return val;
+                    return val.icon || null;
+                  };
+                  const iconPath = getIconPath(colorIcon);
+                  if (!iconPath) return null;
+                  return (
+                    <div
+                      key={i}
+                      className="modal-color-swatch"
+                      title={`Color ${i + 1}`}
+                    >
+                      <img src={resolveImg(iconPath)} alt={`Color ${i + 1}`} />
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}

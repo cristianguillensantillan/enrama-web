@@ -1984,32 +1984,21 @@ button {
   flex-wrap: wrap;
 }
 
-.modal-color-btn {
+.modal-color-swatch {
   width: 36px;
   height: 36px;
   border-radius: 50%;
   border: 1.5px solid var(--clr-tan);
   padding: 2px;
   background: white;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  transition: all var(--transition);
+  box-shadow: var(--shadow-sm);
 }
 
-.modal-color-btn:hover {
-  transform: translateY(-2px);
-  border-color: var(--clr-accent);
-}
-
-.modal-color-btn.active {
-  border: 2px solid var(--clr-accent);
-  box-shadow: 0 0 0 3px rgba(166, 124, 82, 0.2);
-}
-
-.modal-color-btn img {
+.modal-color-swatch img {
   width: 100%;
   height: 100%;
   border-radius: 50%;

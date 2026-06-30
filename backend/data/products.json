@@ -14,18 +14,9 @@
     "dimensiones": "100 cm x 93 cm x 63 cm",
     "featured": true,
     "colors": [
-      {
-        "icon": "/uploads/1782745768585-458064106.jpg",
-        "image": "/uploads/1782745768585-458064106.jpg"
-      },
-      {
-        "icon": "/uploads/1782746005852-816967170.jpg",
-        "image": "/uploads/1782746005852-816967170.jpg"
-      },
-      {
-        "icon": "/uploads/1782746016323-12301404.jpg",
-        "image": "/uploads/1782746016323-12301404.jpg"
-      }
+      "/uploads/1782745768585-458064106.jpg",
+      "/uploads/1782746005852-816967170.jpg",
+      "/uploads/1782746016323-12301404.jpg"
     ],
     "createdAt": "2024-01-01T00:00:00.000Z"
   },
