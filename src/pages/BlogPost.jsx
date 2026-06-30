@@ -65,39 +65,52 @@ export default function BlogPost() {
 
   return (
     <article className="blog-post-page">
-      <button className="back-btn" onClick={() => navigate("/journal")}>
-        ← Volver al Journal
-      </button>
-
-      {post.coverImage && (
-        <img
-          src={resolveImg(post.coverImage)}
-          alt={post.title}
-          className="blog-post-cover"
-          onError={(e) => (e.target.style.display = "none")}
-        />
-      )}
-
-      <h1>{post.title}</h1>
-
-      <div className="blog-post-meta">
-        <span>📅 {formatDate(post.date)}</span>
-        {post.author && <span>✍ {post.author}</span>}
-        {post.tags?.length > 0 && (
-          <div className="blog-tags">
-            {post.tags.map((t) => (
-              <span key={t} className="blog-tag">{t}</span>
-            ))}
-          </div>
+      <div className={`blog-post-header ${post.coverImage ? "has-cover" : ""}`}>
+        {post.coverImage && (
+          <>
+            <img
+              src={resolveImg(post.coverImage)}
+              alt={post.title}
+              className="blog-post-cover-bg"
+              onError={(e) => {
+                e.target.style.display = "none";
+                e.target.parentNode.classList.remove('has-cover');
+              }}
+            />
+            <div className="blog-post-header-overlay" />
+          </>
         )}
+
+        <div className="blog-post-header-content">
+          <button className="back-btn" onClick={() => navigate("/journal")}>
+            ← Volver al Journal
+          </button>
+
+          <div className="blog-post-header-text">
+            {post.tags?.length > 0 && (
+              <div className="blog-tags">
+                {post.tags.map((t) => (
+                  <span key={t} className="blog-tag">{t}</span>
+                ))}
+              </div>
+            )}
+            <h1>{post.title}</h1>
+            <div className="blog-post-meta">
+              <span>📅 {formatDate(post.date)}</span>
+              {post.author && <span>✍ {post.author}</span>}
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div 
-        className="blog-post-content" 
-        dangerouslySetInnerHTML={{ 
-          __html: post.content ? post.content.replaceAll('/uploads/', `${API}/uploads/`) : "" 
-        }}
-      />
+      <div className="blog-post-container">
+        <div 
+          className="blog-post-content" 
+          dangerouslySetInnerHTML={{ 
+            __html: post.content ? post.content.replaceAll('/uploads/', `${API}/uploads/`) : "" 
+          }}
+        />
+      </div>
     </article>
   );
 }
