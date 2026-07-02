@@ -363,15 +363,49 @@ app.get("/api/homepage", (req, res) => {
 });
 
 app.put("/api/homepage", requireAdmin, upload.fields([
-  { name: "heroImages", maxCount: 5 },
+  { name: "heroImages", maxCount: 15 },
   { name: "aboutImages", maxCount: 10 },
   { name: "logo", maxCount: 1 },
 ]), (req, res) => {
   try {
     const current = readJSON("homepage.json");
-    const heroImages = req.files?.heroImages?.length
-      ? req.files.heroImages.map((f) => `/uploads/${f.filename}`)
-      : current.hero.images;
+    
+    let heroImages = [];
+    if (req.body.heroImagesMetadata) {
+      try {
+        const metadata = JSON.parse(req.body.heroImagesMetadata);
+        const uploadedFiles = req.files?.heroImages || [];
+        metadata.forEach((item) => {
+          if (item.type === "existing") {
+            heroImages.push({
+              url: item.url,
+              position: item.position || "center",
+            });
+          } else if (item.type === "new") {
+            const file = uploadedFiles[item.fileIndex];
+            if (file) {
+              heroImages.push({
+                url: `/uploads/${file.filename}`,
+                position: item.position || "center",
+              });
+            }
+          }
+        });
+      } catch (err) {
+        console.error("Error parsing heroImagesMetadata:", err);
+        heroImages = req.files?.heroImages?.length
+          ? req.files.heroImages.map((f) => ({ url: `/uploads/${f.filename}`, position: "center" }))
+          : current.hero.images;
+      }
+    } else {
+      if (req.files?.heroImages?.length) {
+        heroImages = req.files.heroImages.map((f) => ({ url: `/uploads/${f.filename}`, position: "center" }));
+      } else {
+        heroImages = (current.hero.images || []).map((img) =>
+          typeof img === "string" ? { url: img, position: "center" } : img
+        );
+      }
+    }
 
     const aboutImages = req.files?.aboutImages?.length
       ? req.files.aboutImages.map((f) => `/uploads/${f.filename}`)

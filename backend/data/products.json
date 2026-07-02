@@ -2,98 +2,98 @@
   {
     "id": "3",
     "name": "Butaca - Yarey I",
-    "price": "$32,000.00",
-    "image": "/uploads/1782746016323-12301404.jpg",
+    "price": "RD$ 32,000.00",
+    "image": "/uploads/1783028102205-442965977.jpeg",
     "images": [
-      "/uploads/placeholder.jpg",
-      "/uploads/placeholder.jpg",
-      "/uploads/placeholder.jpg"
+      "/uploads/1783028102211-303509905.jpeg",
+      "/uploads/1783028102216-863029227.jpeg",
+      "/uploads/1783028102221-212642509.jpeg"
     ],
-    "info": "Butaca elegante y confortable para sala de estar.",
-    "material": "Jequitiba | Caoba | Roble",
-    "dimensiones": "80cm x 85cm x 95cm",
+    "info": "La Butaca Yarey I combina elegancia, comodidad y artesanía en una pieza de diseño atemporal. Fabricada en madera maciza y con acabados de alta calidad, es ideal para complementar salas, terrazas, hoteles o espacios de descanso, ofreciendo resistencia y un estilo sofisticado.",
+    "material": "Jequitiba | Caoba Africana | Roble Brasileño",
+    "dimensiones": "100cm x 90cm x 63cm",
     "featured": true,
     "createdAt": "2024-01-03T00:00:00.000Z",
     "colors": [
       {
-        "icon": "/uploads/1782855388959-25766150.jpg",
+        "icon": "/uploads/1783028458539-272457034.jpeg",
         "name": "Jequitiva",
-        "price": "32,000.00"
+        "price": "RD$ 32,000.00"
       },
       {
-        "icon": "/uploads/1782855388960-275869811.jpg",
-        "name": "Caoba",
-        "price": "34,000.00"
+        "icon": "/uploads/1783028458540-744601465.jpeg",
+        "name": "Caoba Africana",
+        "price": "RD$ 37,500.00"
       },
       {
-        "icon": "/uploads/1782855388962-182981304.jpg",
-        "name": "Roble",
-        "price": "36,000.00"
+        "icon": "/uploads/1783028458541-481240332.jpeg",
+        "name": "Roble Brasileño",
+        "price": "RD$ 38,000.00"
       }
     ]
   },
   {
     "id": "2",
     "name": "Silla - Yarey II",
-    "price": "$24,000.00",
-    "image": "/uploads/1782746005852-816967170.jpg",
+    "price": "RD$ 24,000.00",
+    "image": "/uploads/1783028440100-615320738.jpeg",
     "images": [
-      "/uploads/placeholder.jpg",
-      "/uploads/placeholder.jpg",
-      "/uploads/placeholder.jpg"
+      "/uploads/1783028440106-349928850.jpeg",
+      "/uploads/1783028440111-428726752.jpeg",
+      "/uploads/1783028440116-815914141.jpeg"
     ],
-    "info": "Silla cómoda y resistente ideal para comedor.",
-    "material": "Jequitiba | Caoba | Roble",
-    "dimensiones": "45cm x 50cm x 90cm",
+    "info": "La Silla Yarey II destaca por su diseño ergonómico y su construcción en madera de excelente calidad. Su estilo versátil la convierte en una opción perfecta para comedores, restaurantes, cafeterías o cualquier ambiente que requiera una combinación de confort, durabilidad y estética.",
+    "material": "Jequitiba | Caoba Africana | Roble Brasileño",
+    "dimensiones": "82 cm x 58 cm x 53 cm",
     "featured": true,
     "createdAt": "2024-01-02T00:00:00.000Z",
     "colors": [
       {
-        "icon": "/uploads/1782855337580-107123151.jpg",
+        "icon": "/uploads/1783028440123-920466940.jpeg",
         "name": "Jequitiva",
-        "price": "24,000.00"
+        "price": "RD$ 24,000.00"
       },
       {
-        "icon": "/uploads/1782855337582-828260946.jpg",
-        "name": "Caoba",
-        "price": "26,000.00"
+        "icon": "/uploads/1783028440126-192325954.jpeg",
+        "name": "Caoba Africana",
+        "price": "RD$ 27,100.00"
       },
       {
-        "icon": "/uploads/1782855337583-950418620.jpg",
-        "name": "Roble",
-        "price": "28,000.00"
+        "icon": "/uploads/1783028440128-207827203.jpeg",
+        "name": "Roble Brasileño",
+        "price": "RD$ 29,000.00"
       }
     ]
   },
   {
     "id": "1",
     "name": "Mecedora - Yarey III",
-    "price": "$37,000.00",
-    "image": "/uploads/1782745768585-458064106.jpg",
+    "price": "RD$ 37,000.00",
+    "image": "/uploads/1783028696469-943782473.jpeg",
     "images": [
-      "/uploads/placeholder.jpg",
-      "/uploads/placeholder.jpg",
-      "/uploads/placeholder.jpg"
+      "/uploads/1783028696473-941913781.jpeg",
+      "/uploads/1783028696478-984832404.jpeg",
+      "/uploads/1783028696483-365528383.jpeg"
     ],
-    "info": "Una mecedora artesanal hecha a mano con madera de roble.",
-    "material": "Jequitiba | Caoba | Roble",
-    "dimensiones": "100 cm x 93 cm x 63 cm",
+    "info": "La Mecedora Yarey III está diseñada para brindar una experiencia de relajación única. Su estructura sólida, movimiento suave y acabados artesanales la convierten en una pieza ideal para disfrutar de momentos de descanso en interiores o exteriores techados, aportando calidez y distinción a cualquier espacio.",
+    "material": "Jequitiba | Caoba Africana | Roble Brasileño",
+    "dimensiones": "101 cm x 93 cm x 63 cm",
     "featured": true,
     "colors": [
       {
-        "icon": "/uploads/1782855289874-612967194.jpg",
+        "icon": "/uploads/1783028696487-169069236.jpeg",
         "name": "Jequitiba",
-        "price": "37,000.00"
+        "price": "RD$ 37,000.00"
       },
       {
-        "icon": "/uploads/1782855289878-678500331.jpg",
-        "name": "Caoba",
-        "price": "39,000.00"
+        "icon": "/uploads/1783028696490-319329995.jpeg",
+        "name": "Caoba Africana",
+        "price": "RD$ 41,000.00"
       },
       {
-        "icon": "/uploads/1782855289880-660801362.jpg",
-        "name": "Roble",
-        "price": "41,000.00"
+        "icon": "/uploads/1783028696493-228615672.jpeg",
+        "name": "Roble Brasileño",
+        "price": "RD$ 42,000.00"
       }
     ],
     "createdAt": "2024-01-01T00:00:00.000Z"

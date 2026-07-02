@@ -34,13 +34,20 @@ export default function Hero() {
     <section className="hero">
       {/* Background slides */}
       {images.length > 0 ? (
-        images.map((img, i) => (
-          <div
-            key={i}
-            className={`hero-slide ${i === current ? "active" : ""}`}
-            style={{ backgroundImage: `url(${resolveImg(img)})` }}
-          />
-        ))
+        images.map((img, i) => {
+          const imgUrl = typeof img === "object" ? img?.url : img;
+          const imgPos = typeof img === "object" ? (img?.position || "center") : "center";
+          return (
+            <div
+              key={i}
+              className={`hero-slide ${i === current ? "active" : ""}`}
+              style={{ 
+                backgroundImage: `url(${resolveImg(imgUrl)})`,
+                backgroundPosition: imgPos
+              }}
+            />
+          );
+        })
       ) : (
         <div
           className="hero-slide active"

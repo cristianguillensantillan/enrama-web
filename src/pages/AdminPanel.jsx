@@ -720,7 +720,7 @@ function BlogTab() {
 function HomepageTab() {
   const { homepage, updateHomepage, API } = useData();
   const [form, setForm] = useState(null);
-  const [heroImages, setHeroImages] = useState([]);
+  const [heroList, setHeroList] = useState([]);
   const [aboutImages, setAboutImages] = useState([]);
   const [logoFile, setLogoFile] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -743,13 +743,64 @@ function HomepageTab() {
         contactPhone: homepage.contact?.phone || "",
         contactInstagram: homepage.contact?.instagram || "",
       });
+
+      const initialHero = (homepage.hero?.images || []).map((img, idx) => {
+        if (typeof img === "object") {
+          return { id: `existing-${idx}`, type: "existing", url: img.url, position: img.position || "center" };
+        }
+        return { id: `existing-${idx}`, type: "existing", url: img, position: "center" };
+      });
+      setHeroList(initialHero);
     }
   }, [homepage]);
+
+  // Clean up object URLs to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      heroList.forEach(item => {
+        if (item.type === "new" && item.preview) {
+          URL.revokeObjectURL(item.preview);
+        }
+      });
+    };
+  }, [heroList]);
 
   if (!form) return <div className="loading-spinner"><div className="spinner" /></div>;
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleAddHeroImages = (e) => {
+    const files = Array.from(e.target.files);
+    const newItems = files.map((file, idx) => {
+      const uniqueId = `new-${Date.now()}-${idx}-${Math.random()}`;
+      return {
+        id: uniqueId,
+        type: "new",
+        file: file,
+        preview: URL.createObjectURL(file),
+        position: "center"
+      };
+    });
+    setHeroList((prev) => [...prev, ...newItems]);
+    e.target.value = "";
+  };
+
+  const handleDeleteHeroImage = (id) => {
+    setHeroList((prev) => {
+      const item = prev.find((i) => i.id === id);
+      if (item && item.type === "new" && item.preview) {
+        URL.revokeObjectURL(item.preview);
+      }
+      return prev.filter((i) => i.id !== id);
+    });
+  };
+
+  const handleUpdatePosition = (id, newPos) => {
+    setHeroList((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, position: newPos } : item))
+    );
+  };
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -757,7 +808,29 @@ function HomepageTab() {
     setSaved(false);
     const fd = new FormData();
     Object.entries(form).forEach(([k, v]) => fd.append(k, v));
-    heroImages.forEach((img) => fd.append("heroImages", img));
+
+    // Construct metadata and append files
+    const metadata = [];
+    let fileIdx = 0;
+    heroList.forEach((item) => {
+      if (item.type === "existing") {
+        metadata.push({
+          type: "existing",
+          url: item.url,
+          position: item.position
+        });
+      } else if (item.type === "new") {
+        metadata.push({
+          type: "new",
+          fileIndex: fileIdx,
+          position: item.position
+        });
+        fd.append("heroImages", item.file);
+        fileIdx++;
+      }
+    });
+    fd.append("heroImagesMetadata", JSON.stringify(metadata));
+
     aboutImages.forEach((img) => fd.append("aboutImages", img));
     if (logoFile) fd.append("logo", logoFile);
     const r = await updateHomepage(fd);
@@ -821,11 +894,129 @@ function HomepageTab() {
             <Field label="Subtítulo" name="heroSubtitle" />
             <Field label="Texto del botón" name="heroCtaText" />
           </div>
-          <div style={{ marginTop: 16 }}>
-            <label style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--clr-bark)", letterSpacing: "0.5px", textTransform: "uppercase", display: "block", marginBottom: 8 }}>
-              Imágenes del carrusel (reemplaza todas)
+          <div style={{ marginTop: 20 }}>
+            <label style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--clr-bark)", letterSpacing: "0.5px", textTransform: "uppercase", display: "block", marginBottom: 12 }}>
+              Imágenes del carrusel (Hero)
             </label>
-            <input type="file" accept="image/*" multiple onChange={(e) => setHeroImages([...e.target.files])} />
+
+            {heroList.length > 0 ? (
+              <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", marginBottom: 16 }}>
+                {heroList.map((item, idx) => {
+                  const previewSrc = item.type === "existing" ? `${API}${item.url}` : item.preview;
+                  return (
+                    <div 
+                      key={item.id} 
+                      style={{ 
+                        width: "150px", 
+                        background: "var(--clr-white)", 
+                        border: "1px solid var(--clr-sand)", 
+                        borderRadius: "8px", 
+                        padding: "10px", 
+                        display: "flex", 
+                        flexDirection: "column", 
+                        gap: "8px", 
+                        position: "relative" 
+                      }}
+                    >
+                      {item.type === "new" && (
+                        <span style={{ 
+                          position: "absolute", 
+                          top: "14px", 
+                          left: "14px", 
+                          background: "var(--clr-success)", 
+                          color: "white", 
+                          fontSize: "0.6rem", 
+                          fontWeight: 600, 
+                          padding: "2px 6px", 
+                          borderRadius: "4px" 
+                        }}>
+                          NUEVO
+                        </span>
+                      )}
+                      <img 
+                        src={previewSrc} 
+                        alt={`Slide ${idx + 1}`} 
+                        style={{ width: "100%", height: "90px", objectFit: "cover", borderRadius: "6px" }}
+                      />
+                      
+                      <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                        <span style={{ fontSize: "0.7rem", fontWeight: 600, color: "var(--clr-earth)" }}>Alineación:</span>
+                        <select
+                          value={item.position}
+                          onChange={(e) => handleUpdatePosition(item.id, e.target.value)}
+                          style={{ 
+                            fontSize: "0.75rem", 
+                            padding: "4px", 
+                            borderRadius: "4px", 
+                            border: "1px solid var(--clr-sand)",
+                            background: "var(--clr-cream)",
+                            cursor: "pointer",
+                            width: "100%"
+                          }}
+                        >
+                          <option value="center">Centro</option>
+                          <option value="top">Arriba (Superior)</option>
+                          <option value="bottom">Abajo (Inferior)</option>
+                          <option value="left">Izquierda</option>
+                          <option value="right">Derecha</option>
+                        </select>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteHeroImage(item.id)}
+                        style={{
+                          background: "#ffebee",
+                          color: "#c62828",
+                          border: "none",
+                          fontSize: "0.75rem",
+                          fontWeight: 500,
+                          padding: "6px 0",
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                          transition: "background 0.2s",
+                          width: "100%",
+                          textAlign: "center"
+                        }}
+                        onMouseEnter={(e) => e.target.style.background = "#ffcdd2"}
+                        onMouseLeave={(e) => e.target.style.background = "#ffebee"}
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p style={{ fontSize: "0.85rem", color: "var(--clr-bark-light)", marginBottom: 12 }}>No hay imágenes en el carrusel.</p>
+            )}
+
+            <div style={{ marginTop: 12 }}>
+              <label 
+                style={{ 
+                  display: "inline-block", 
+                  cursor: "pointer", 
+                  background: "var(--clr-accent)", 
+                  color: "white", 
+                  padding: "8px 16px", 
+                  borderRadius: "4px", 
+                  fontSize: "0.85rem", 
+                  fontWeight: 500,
+                  transition: "background 0.2s"
+                }}
+                onMouseEnter={(e) => e.target.style.background = "var(--clr-earth)"}
+                onMouseLeave={(e) => e.target.style.background = "var(--clr-accent)"}
+              >
+                ➕ Añadir imágenes al carrusel
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  multiple 
+                  onChange={handleAddHeroImages} 
+                  style={{ display: "none" }} 
+                />
+              </label>
+            </div>
           </div>
         </div>
 
