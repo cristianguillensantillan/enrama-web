@@ -118,9 +118,14 @@ export default function OrderModal({ product, onClose }) {
               contigo pronto.
             </p>
             {form.email && (
-              <p style={{ fontSize: "0.82rem", color: "var(--clr-earth)" }}>
-                Se envió una confirmación a {form.email}
-              </p>
+              <div style={{ marginTop: "12px", display: "flex", flexDirection: "column", gap: "6px" }}>
+                <p style={{ fontSize: "0.85rem", color: "var(--clr-earth)", margin: 0 }}>
+                  Se envió una confirmación a <strong>{form.email}</strong>.
+                </p>
+                <p style={{ fontSize: "0.8rem", color: "var(--clr-bark-light)", fontStyle: "italic", margin: 0, opacity: 0.9 }}>
+                  (Si no lo recibes en tu bandeja de entrada, por favor revisa tu carpeta de <strong>correo no deseado o spam</strong>).
+                </p>
+              </div>
             )}
             <button className="order-success-btn" onClick={onClose}>
               Cerrar
