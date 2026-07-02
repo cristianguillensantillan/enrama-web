@@ -43,6 +43,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -52,6 +53,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 img {
@@ -1000,20 +1003,95 @@ button {
 @media (max-width: 680px) {
   .modal-box {
     grid-template-columns: 1fr;
-    max-height: 95vh;
+    max-height: 94vh;
   }
 
   .modal-carousel {
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    min-height: 280px;
+    min-height: 260px;
   }
 
   .modal-carousel-img {
-    min-height: 280px;
+    min-height: 260px;
   }
 
   .modal-info {
     padding: 24px 20px;
+  }
+
+  .modal-close {
+    background: var(--clr-white);
+    box-shadow: var(--shadow-sm);
+    opacity: 0.9;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-overlay {
+    padding: 10px;
+  }
+
+  .modal-box {
+    border-radius: 12px;
+    max-height: 96vh;
+  }
+
+  .modal-carousel {
+    border-radius: 12px 12px 0 0;
+    min-height: 210px;
+  }
+
+  .modal-carousel-img {
+    min-height: 210px;
+  }
+
+  .modal-info {
+    padding: 18px 16px;
+    gap: 12px;
+  }
+
+  .modal-info h2 {
+    font-size: 1.4rem;
+  }
+
+  .modal-price {
+    font-size: 1.2rem;
+  }
+
+  .modal-specs {
+    padding: 10px 0;
+    gap: 6px;
+  }
+
+  .modal-spec {
+    font-size: 0.8rem;
+  }
+
+  .modal-spec span:first-child {
+    min-width: 80px;
+  }
+
+  .modal-desc {
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+
+  .modal-colors-section {
+    margin: 8px 0 2px 0;
+    gap: 6px;
+  }
+
+  .modal-color-swatch {
+    width: 30px;
+    height: 30px;
+  }
+
+  .modal-close {
+    top: 12px;
+    right: 12px;
+    width: 28px;
+    height: 28px;
+    font-size: 0.95rem;
   }
 }
 

@@ -7,10 +7,10 @@ import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
 
-dotenv.config();
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.join(__dirname, ".env") });
 
 const app = express();
 app.use(cors());
@@ -637,7 +637,11 @@ app.post("/send-order", async (req, res) => {
     res.status(200).json({ message: "Orden enviada con éxito" });
   } catch (error) {
     console.error("Error enviando orden:", error);
-    res.status(500).json({ message: "Error al enviar la orden" });
+    res.status(500).json({ 
+      message: "Error al enviar la orden",
+      error: error.message,
+      stack: error.stack
+    });
   }
 });
 
