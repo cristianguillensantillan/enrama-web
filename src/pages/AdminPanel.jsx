@@ -364,6 +364,32 @@ function PostForm({ post, onSave, onCancel }) {
     }
   };
 
+  const handleInsertBold = () => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const text = textarea.value;
+      const selected = text.substring(start, end);
+
+      const boldTag = `<strong>${selected || "texto en negrita"}</strong>`;
+      const newContent = text.substring(0, start) + boldTag + text.substring(end);
+
+      setForm((prev) => ({ ...prev, content: newContent }));
+
+      setTimeout(() => {
+        textarea.focus();
+        if (selected) {
+          textarea.selectionStart = start;
+          textarea.selectionEnd = start + boldTag.length;
+        } else {
+          textarea.selectionStart = start + 8;
+          textarea.selectionEnd = start + 8 + 17;
+        }
+      }, 50);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.title.trim() || !form.content.trim()) {
@@ -398,20 +424,36 @@ function PostForm({ post, onSave, onCancel }) {
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
               <label style={{ marginBottom: 0 }}>Contenido *</label>
-              <button
-                type="button"
-                className="admin-add-btn"
-                onClick={handleInsertImageClick}
-                style={{
-                  fontSize: "0.8rem",
-                  padding: "4px 10px",
-                  margin: 0,
-                  height: "auto",
-                  lineHeight: 1.2
-                }}
-              >
-                🖼 Insertar imagen en texto
-              </button>
+              <div style={{ display: "flex", gap: "8px" }}>
+                <button
+                  type="button"
+                  className="admin-add-btn"
+                  onClick={handleInsertBold}
+                  style={{
+                    fontSize: "0.8rem",
+                    padding: "4px 10px",
+                    margin: 0,
+                    height: "auto",
+                    lineHeight: 1.2
+                  }}
+                >
+                  <strong>B</strong> Negrita
+                </button>
+                <button
+                  type="button"
+                  className="admin-add-btn"
+                  onClick={handleInsertImageClick}
+                  style={{
+                    fontSize: "0.8rem",
+                    padding: "4px 10px",
+                    margin: 0,
+                    height: "auto",
+                    lineHeight: 1.2
+                  }}
+                >
+                  🖼 Insertar imagen
+                </button>
+              </div>
             </div>
             <textarea
               ref={textareaRef}
