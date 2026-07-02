@@ -521,7 +521,7 @@ app.post("/send-order", async (req, res) => {
     attachments: [
       {
         filename: "enrama-logo.png",
-        path: path.join(__dirname, "../public/enrama-logo.png"),
+        path: path.join(__dirname, "enrama-logo.png"),
         cid: "enramalogo",
         disposition: "inline"
       }
@@ -625,7 +625,7 @@ app.post("/send-order", async (req, res) => {
         attachments: [
           {
             filename: "enrama-logo.png",
-            path: path.join(__dirname, "../public/enrama-logo.png"),
+            path: path.join(__dirname, "enrama-logo.png"),
             cid: "enramalogo",
             disposition: "inline"
           }
