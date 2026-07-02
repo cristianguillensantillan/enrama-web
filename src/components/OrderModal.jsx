@@ -44,10 +44,12 @@ export default function OrderModal({ product, onClose }) {
 
   useEffect(() => {
     document.addEventListener("keydown", handleKey);
-    document.body.style.overflow = "hidden";
+    document.documentElement.classList.add("modal-open");
+    document.body.classList.add("modal-open");
     return () => {
       document.removeEventListener("keydown", handleKey);
-      document.body.style.overflow = "";
+      document.documentElement.classList.remove("modal-open");
+      document.body.classList.remove("modal-open");
     };
   }, [handleKey]);
 
