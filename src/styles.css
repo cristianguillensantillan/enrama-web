@@ -1442,6 +1442,7 @@ button {
   color: var(--clr-dark);
   line-height: 1.25;
   margin-bottom: 16px;
+  text-align: center;
 }
 
 .blog-post-meta {
@@ -1451,6 +1452,7 @@ button {
   color: var(--clr-earth);
   margin-bottom: 36px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .blog-post-content {
@@ -1458,6 +1460,11 @@ button {
   line-height: 1.85;
   color: var(--clr-bark);
   white-space: pre-wrap;
+  text-align: center;
+}
+
+.blog-post-content p {
+  text-align: center;
 }
 
 .back-btn {
