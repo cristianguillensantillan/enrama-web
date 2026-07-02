@@ -1460,11 +1460,11 @@ button {
   line-height: 1.85;
   color: var(--clr-bark);
   white-space: pre-wrap;
-  text-align: center;
+  text-align: justify;
 }
 
 .blog-post-content p {
-  text-align: center;
+  text-align: justify;
 }
 
 .back-btn {
