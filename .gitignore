@@ -12,7 +12,7 @@ backend/.env
 backend/.env.local
 
 # Backend uploads
-backend/uploads/
+#backend/uploads/
 
 # Build and production output
 build/
