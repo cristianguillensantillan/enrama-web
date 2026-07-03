@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Hero from "../components/Hero";
 import About from "../components/About";
 import Newsletter from "../components/Newsletter";
@@ -8,6 +8,17 @@ import { useNavigate } from "react-router-dom";
 export default function Home() {
   const { products, posts, loading, API } = useData();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = "enramá — Mobiliario y Objetos Contemporáneos";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute(
+        "content",
+        "enramá rescata técnicas vernáculas del Cibao utilizándolas en mobiliario contemporáneo de diseño único. Hecho en República Dominicana."
+      );
+    }
+  }, []);
 
   const featured = products.filter((p) => p.featured).slice(0, 3);
   const recentPosts = posts.slice(0, 2);

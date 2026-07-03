@@ -20,6 +20,19 @@ export default function BlogPost() {
     }
   }, [id, posts]);
 
+  useEffect(() => {
+    if (post) {
+      document.title = `${post.title} | Journal enramá`;
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) {
+        metaDesc.setAttribute(
+          "content",
+          post.excerpt || "Descubre más detalles sobre esta historia en el journal oficial de enramá."
+        );
+      }
+    }
+  }, [post]);
+
   const resolveImg = (src) => {
     if (!src) return null;
     if (src.startsWith("http")) return src;

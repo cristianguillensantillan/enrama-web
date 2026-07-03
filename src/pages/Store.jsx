@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useData } from "../context/DataContext";
 import ProductCard from "../components/ProductCard";
 import ProductModal from "../components/ProductModal";
@@ -9,10 +9,19 @@ export default function Store() {
   const [detailProduct, setDetailProduct] = useState(null);
   const [orderProduct, setOrderProduct] = useState(null);
 
+  useEffect(() => {
+    document.title = "Tienda | enramá — Mobiliario y Objetos de Diseño";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute(
+        "content",
+        "Explora nuestro catálogo de mobiliario contemporáneo tejido a mano por artesanos dominicanos del Cibao. Sillas, butacas, bancos y objetos de diseño."
+      );
+    }
+  }, []);
+
   return (
     <>
-      <title>Tienda — enramá</title>
-
       <div className="store-page">
         <div className="page-header">
           <span className="section-tag">Nuestra colección</span>

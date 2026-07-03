@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useData } from "../context/DataContext";
 import BlogCard from "../components/BlogCard";
 
 export default function Blog() {
   const { posts, loading } = useData();
+
+  useEffect(() => {
+    document.title = "Journal | enramá — Historias de la Artesanía Dominicana";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute(
+        "content",
+        "Conoce las historias de nuestros maestros artesanos, el rescate de las técnicas del Cibao y el proceso de creación detrás de cada mueble enramá."
+      );
+    }
+  }, []);
 
   return (
     <div className="blog-page">
