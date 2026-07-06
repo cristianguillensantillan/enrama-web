@@ -16,6 +16,9 @@ export default function ProductCard({ product, onDetails, onOrder }) {
         {product.featured && (
           <span className="product-badge">Destacado</span>
         )}
+        {product.useLaunchPrice && (
+          <span className="launch-badge">Precio de lanzamiento</span>
+        )}
         <img
           src={resolveImg(product.image)}
           alt={product.name}
