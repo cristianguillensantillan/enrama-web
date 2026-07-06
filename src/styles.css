@@ -2460,3 +2460,24 @@ button {
   background: var(--clr-earth);
   color: white;
 }
+
+/* Launch Price Styles */
+.strikethrough {
+  text-decoration: line-through !important;
+}
+
+.product-price-original,
+.modal-price-original,
+.order-price-original {
+  margin-left: 8px;
+  font-size: 0.85em;
+  color: var(--clr-tan);
+  font-weight: 400;
+  text-decoration: line-through;
+}
+
+.product-price-launch,
+.modal-price-launch {
+  color: var(--clr-accent);
+  font-weight: 600;
+}

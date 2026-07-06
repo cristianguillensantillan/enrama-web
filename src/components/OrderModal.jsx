@@ -70,7 +70,10 @@ export default function OrderModal({ product, onClose }) {
   };
 
   const selectedWoodObj = availableWoods.find(w => w.name === form.madera);
-  const activePrice = selectedWoodObj?.price || product?.price;
+  const baseProductPrice = product?.useLaunchPrice && product?.launchPrice 
+    ? product.launchPrice 
+    : product?.price;
+  const activePrice = selectedWoodObj?.price || baseProductPrice;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -136,7 +139,14 @@ export default function OrderModal({ product, onClose }) {
             <h2>Ordenar producto</h2>
             <p className="order-product-name">
               Estás ordenando: <strong>{product.name}</strong> —{" "}
-              <strong style={{ color: "var(--clr-accent)" }}>Desde {activePrice}</strong>
+              <strong style={{ color: "var(--clr-accent)" }}>
+                Desde {activePrice}
+                {product.useLaunchPrice && product.launchPrice && !selectedWoodObj?.price && (
+                  <span className="order-price-original strikethrough" style={{ marginLeft: "8px", fontSize: "0.85em", color: "var(--clr-tan)", textDecoration: "line-through", fontWeight: "normal" }}>
+                    {product.price}
+                  </span>
+                )}
+              </strong>
             </p>
             {product.material && (
               <p className="order-product-material" style={{ fontSize: "0.85rem", color: "var(--clr-earth)", marginTop: "-12px", marginBottom: "16px" }}>

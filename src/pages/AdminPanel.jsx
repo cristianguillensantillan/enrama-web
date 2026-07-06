@@ -57,6 +57,8 @@ function ProductForm({ product, onSave, onCancel }) {
   const [form, setForm] = useState({
     name: product?.name || "",
     price: product?.price || "",
+    launchPrice: product?.launchPrice || "",
+    useLaunchPrice: product?.useLaunchPrice ? "true" : "false",
     info: product?.info || "",
     material: product?.material || "",
     dimensiones: product?.dimensiones || "",
@@ -155,6 +157,17 @@ function ProductForm({ product, onSave, onCancel }) {
           <div>
             <label>Precio Base *</label>
             <input name="price" value={form.price} onChange={handleChange} placeholder="Ej: $20,000" />
+          </div>
+          <div>
+            <label>Precio de Lanzamiento (Opcional)</label>
+            <input name="launchPrice" value={form.launchPrice} onChange={handleChange} placeholder="Ej: $18,000" />
+          </div>
+          <div>
+            <label>Activar Precio de Lanzamiento</label>
+            <select name="useLaunchPrice" value={form.useLaunchPrice} onChange={handleChange}>
+              <option value="false">No</option>
+              <option value="true">Sí — tachar precio base y mostrar este</option>
+            </select>
           </div>
           <div>
             <label>Material</label>

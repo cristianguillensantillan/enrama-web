@@ -92,7 +92,16 @@ export default function ProductModal({ product, onClose, onOrder }) {
           </button>
 
           <h2>{product.name}</h2>
-          <p className="modal-price">Desde {product.price}</p>
+          <p className="modal-price">
+            {product.useLaunchPrice && product.launchPrice ? (
+              <>
+                <span className="modal-price-launch">Desde {product.launchPrice}</span>
+                <span className="modal-price-original strikethrough">{product.price}</span>
+              </>
+            ) : (
+              `Desde ${product.price}`
+            )}
+          </p>
 
           {/* Color variant selectors */}
           {product.colors && product.colors.some(c => c) && (
