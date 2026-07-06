@@ -556,6 +556,101 @@ function PostForm({ post, onSave, onCancel }) {
   );
 }
 
+// ─── Downloadable Form Modal ───────────────────────────────────
+function DownloadableForm({ downloadable, onSave, onCancel }) {
+  const [form, setForm] = useState({
+    title: downloadable?.title || "",
+    description: downloadable?.description || "",
+    fileType: downloadable?.fileType || "Modelo 3D",
+    link: downloadable?.file && downloadable.file.startsWith("http") ? downloadable.file : "",
+  });
+  const [file, setFile] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.title.trim()) {
+      setError("El título es obligatorio.");
+      return;
+    }
+    if (!downloadable && !file && !form.link.trim()) {
+      setError("Debe subir un archivo o proporcionar un enlace externo.");
+      return;
+    }
+    setSaving(true);
+    setError("");
+
+    const fd = new FormData();
+    Object.entries(form).forEach(([k, v]) => {
+      if (k !== "link") fd.append(k, v);
+    });
+    if (form.link.trim()) fd.append("link", form.link.trim());
+    if (file) fd.append("file", file);
+    if (previewImage) fd.append("previewImage", previewImage);
+
+    const result = await onSave(fd);
+    if (!result.ok) setError(result.message || "Error al guardar");
+    setSaving(false);
+  };
+
+  return (
+    <div className="admin-form-overlay" onClick={onCancel}>
+      <div className="admin-form-box" onClick={(e) => e.stopPropagation()}>
+        <h3>{downloadable ? "Editar descargable" : "Nuevo descargable"}</h3>
+        <form className="admin-form" onSubmit={handleSubmit}>
+          <div>
+            <label>Título *</label>
+            <input name="title" value={form.title} onChange={handleChange} placeholder="Ej: Silla Mecedora - Modelo 3D" />
+          </div>
+          <div>
+            <label>Tipo de archivo *</label>
+            <select name="fileType" value={form.fileType} onChange={handleChange}>
+              <option value="Modelo 3D">Modelo 3D</option>
+              <option value="Catálogo PDF">Catálogo PDF</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+          <div>
+            <label>Descripción</label>
+            <textarea name="description" value={form.description} onChange={handleChange} placeholder="Breve descripción del archivo…" rows={3} />
+          </div>
+          <div>
+            <label>Imagen de previsualización (Foto)</label>
+            <input type="file" accept="image/*" onChange={(e) => setPreviewImage(e.target.files[0])} />
+          </div>
+          <div>
+            <label>Enlace externo (si no sube un archivo)</label>
+            <input 
+              name="link" 
+              value={form.link} 
+              onChange={handleChange} 
+              placeholder="Ej: https://sketchfab.com/models/..." 
+            />
+          </div>
+          <div>
+            <label>Archivo descargable {downloadable ? "(Dejar en blanco para conservar el actual)" : "(Opcional si usó enlace externo)"}</label>
+            <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+          </div>
+
+          {error && <p style={{ color: "var(--clr-error)", fontSize: "0.85rem" }}>⚠ {error}</p>}
+
+          <div className="admin-form-actions">
+            <button type="button" className="admin-cancel-btn" onClick={onCancel}>Cancelar</button>
+            <button type="submit" className="admin-save-btn" disabled={saving}>
+              {saving ? "Guardando…" : "Guardar descargable"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 // ─── Products Tab ─────────────────────────────────────────
 function ProductsTab() {
   const { products, createProduct, updateProduct, deleteProduct, reorderProducts, API } = useData();
@@ -1125,6 +1220,85 @@ function HomepageTab() {
   );
 }
 
+// ─── Downloadables Tab ─────────────────────────────────────
+function DownloadablesTab() {
+  const { downloadables, createDownloadable, updateDownloadable, deleteDownloadable, API } = useData();
+  const [form, setForm] = useState(null); // null | 'new' | downloadable object
+
+  const resolveImg = (src) => {
+    if (!src) return null;
+    if (src.startsWith("http")) return src;
+    return `${API}${src}`;
+  };
+
+  const handleSave = async (fd) => {
+    if (form === "new") {
+      const r = await createDownloadable(fd);
+      if (r.ok) setForm(null);
+      return r;
+    } else {
+      const r = await updateDownloadable(form.id, fd);
+      if (r.ok) setForm(null);
+      return r;
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm("¿Eliminar este archivo descargable?")) {
+      await deleteDownloadable(id);
+    }
+  };
+
+  return (
+    <div>
+      <div className="admin-section-header">
+        <h2>Descargables</h2>
+        <button className="admin-add-btn" onClick={() => setForm("new")}>
+          + Nuevo descargable
+        </button>
+      </div>
+
+      <div className="admin-list">
+        {downloadables.length === 0 && (
+          <div className="empty-state">
+            <h3>Sin descargables</h3>
+            <p>Agrega tu primer archivo descargable (catálogos, modelos 3D, etc.).</p>
+          </div>
+        )}
+        {downloadables.map((item) => (
+          <div key={item.id} className="admin-item">
+            <img 
+              src={resolveImg(item.previewImage)} 
+              alt={item.title} 
+              className="admin-item-img"
+              onError={(e) => { 
+                e.target.style.background = "var(--clr-sand)"; 
+                e.target.src = ""; 
+              }} 
+            />
+            <div className="admin-item-info">
+              <h4>{item.title}</h4>
+              <p>{item.fileType} · <span style={{ fontSize: "0.85rem", color: "var(--clr-bark-light)" }}>{item.fileName || "Archivo"}</span></p>
+            </div>
+            <div className="admin-item-actions">
+              <button className="admin-edit-btn" onClick={() => setForm(item)}>Editar</button>
+              <button className="admin-delete-btn" onClick={() => handleDelete(item.id)}>Eliminar</button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {form !== null && (
+        <DownloadableForm
+          downloadable={form === "new" ? null : form}
+          onSave={handleSave}
+          onCancel={() => setForm(null)}
+        />
+      )}
+    </div>
+  );
+}
+
 // ─── Main Admin Panel ─────────────────────────────────────
 export default function AdminPanel() {
   const { adminToken, logout } = useData();
@@ -1143,6 +1317,7 @@ export default function AdminPanel() {
     { id: "products", label: "Productos", icon: "📦" },
     { id: "blog", label: "Journal", icon: "✍️" },
     { id: "homepage", label: "Página principal", icon: "🏠" },
+    { id: "downloadables", label: "Descargables", icon: "📁" },
   ];
 
   return (
@@ -1177,6 +1352,7 @@ export default function AdminPanel() {
         {tab === "products" && <ProductsTab />}
         {tab === "blog" && <BlogTab />}
         {tab === "homepage" && <HomepageTab />}
+        {tab === "downloadables" && <DownloadablesTab />}
       </main>
     </div>
   );

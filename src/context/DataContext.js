@@ -8,6 +8,7 @@ export function DataProvider({ children }) {
   const [products, setProducts] = useState([]);
   const [posts, setPosts] = useState([]);
   const [homepage, setHomepage] = useState(null);
+  const [downloadables, setDownloadables] = useState([]);
   const [loading, setLoading] = useState(true);
   const [adminToken, setAdminToken] = useState(
     () => localStorage.getItem("enrama_admin_token") || null
@@ -16,14 +17,16 @@ export function DataProvider({ children }) {
   const fetchAll = useCallback(async () => {
     setLoading(true);
     try {
-      const [pRes, bRes, hRes] = await Promise.all([
+      const [pRes, bRes, hRes, dRes] = await Promise.all([
         fetch(`${API}/api/products`),
         fetch(`${API}/api/posts`),
         fetch(`${API}/api/homepage`),
+        fetch(`${API}/api/downloadables`),
       ]);
       if (pRes.ok) setProducts(await pRes.json());
       if (bRes.ok) setPosts(await bRes.json());
       if (hRes.ok) setHomepage(await hRes.json());
+      if (dRes.ok) setDownloadables(await dRes.json());
     } catch (err) {
       console.error("Error fetching data:", err);
     } finally {
@@ -160,13 +163,44 @@ export function DataProvider({ children }) {
     return res.ok ? { ok: true } : { ok: false };
   };
 
+  // ── Downloadables CRUD ────────────────────────────
+  const createDownloadable = async (formData) => {
+    const res = await fetch(`${API}/api/downloadables`, {
+      method: "POST",
+      headers: authHeaders(),
+      body: formData,
+    });
+    if (res.ok) { await fetchAll(); return { ok: true }; }
+    return { ok: false, message: (await res.json()).message };
+  };
+
+  const deleteDownloadable = async (id) => {
+    const res = await fetch(`${API}/api/downloadables/${id}`, {
+      method: "DELETE",
+      headers: { ...authHeaders(), "Content-Type": "application/json" },
+    });
+    if (res.ok) { await fetchAll(); return { ok: true }; }
+    return { ok: false };
+  };
+
+  const updateDownloadable = async (id, formData) => {
+    const res = await fetch(`${API}/api/downloadables/${id}`, {
+      method: "PUT",
+      headers: authHeaders(),
+      body: formData,
+    });
+    if (res.ok) { await fetchAll(); return { ok: true }; }
+    return { ok: false, message: (await res.json()).message };
+  };
+
   return (
     <DataContext.Provider value={{
-      products, posts, homepage, loading, adminToken,
+      products, posts, homepage, downloadables, loading, adminToken,
       login, logout,
       createProduct, updateProduct, deleteProduct, reorderProducts,
       createPost, updatePost, deletePost,
       updateHomepage,
+      createDownloadable, updateDownloadable, deleteDownloadable,
       sendOrder, sendNewsletter,
       API,
     }}>

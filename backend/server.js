@@ -459,6 +459,165 @@ app.post("/api/upload", requireAdmin, upload.single("file"), (req, res) => {
 });
 
 // ══════════════════════════════════════════════
+// DOWNLOADABLES ROUTES
+// ══════════════════════════════════════════════
+app.get("/api/downloadables", (req, res) => {
+  try {
+    res.json(readJSON("downloadables.json"));
+  } catch (err) {
+    res.status(500).json({ message: "Error al leer descargables" });
+  }
+});
+
+app.post("/api/downloadables", requireAdmin, upload.fields([
+  { name: "file", maxCount: 1 },
+  { name: "previewImage", maxCount: 1 }
+]), (req, res) => {
+  try {
+    const downloadables = readJSON("downloadables.json");
+    const fileUploaded = req.files?.file?.[0];
+    const previewUploaded = req.files?.previewImage?.[0];
+    
+    if (!fileUploaded && !req.body.link) {
+      return res.status(400).json({ message: "Debe subir un archivo o proporcionar un enlace" });
+    }
+    
+    const filePath = fileUploaded 
+      ? `/uploads/${fileUploaded.filename}` 
+      : req.body.link;
+      
+    const previewImagePath = previewUploaded 
+      ? `/uploads/${previewUploaded.filename}` 
+      : "/uploads/placeholder.jpg";
+      
+    const newDownloadable = {
+      id: Date.now().toString(),
+      title: req.body.title || "Sin título",
+      description: req.body.description || "",
+      fileType: req.body.fileType || "Modelo 3D",
+      file: filePath,
+      previewImage: previewImagePath,
+      fileName: fileUploaded ? fileUploaded.originalname : "Enlace",
+      createdAt: new Date().toISOString(),
+    };
+    
+    downloadables.unshift(newDownloadable);
+    writeJSON("downloadables.json", downloadables);
+    res.status(201).json(newDownloadable);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error al crear descargable" });
+  }
+});
+
+app.put("/api/downloadables/:id", requireAdmin, upload.fields([
+  { name: "file", maxCount: 1 },
+  { name: "previewImage", maxCount: 1 }
+]), (req, res) => {
+  try {
+    const downloadables = readJSON("downloadables.json");
+    const idx = downloadables.findIndex((d) => d.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ message: "Descargable no encontrado" });
+
+    const existing = downloadables[idx];
+    const fileUploaded = req.files?.file?.[0];
+    const previewUploaded = req.files?.previewImage?.[0];
+
+    const deleteFile = (relativePath) => {
+      if (relativePath && !relativePath.includes("placeholder.jpg") && !relativePath.startsWith("http")) {
+        const fullPath = path.join(__dirname, relativePath);
+        console.log(`[Update-Delete] Checking file existence for: ${fullPath}`);
+        if (fs.existsSync(fullPath)) {
+          try {
+            fs.unlinkSync(fullPath);
+            console.log(`[Update-Delete] Successfully deleted file: ${fullPath}`);
+          } catch (e) {
+            console.error(`[Update-Delete] Error deleting file ${fullPath}:`, e);
+          }
+        } else {
+          console.log(`[Update-Delete] File not found on disk: ${fullPath}`);
+        }
+      }
+    };
+
+    let filePath = existing.file;
+    let fileName = existing.fileName;
+
+    if (fileUploaded) {
+      deleteFile(existing.file);
+      filePath = `/uploads/${fileUploaded.filename}`;
+      fileName = fileUploaded.originalname;
+    } else if (req.body.link !== undefined) {
+      if (req.body.link !== existing.file) {
+        deleteFile(existing.file);
+        filePath = req.body.link;
+        fileName = "Enlace";
+      }
+    }
+
+    let previewImagePath = existing.previewImage;
+    if (previewUploaded) {
+      deleteFile(existing.previewImage);
+      previewImagePath = `/uploads/${previewUploaded.filename}`;
+    }
+
+    downloadables[idx] = {
+      ...existing,
+      title: req.body.title ?? existing.title,
+      description: req.body.description ?? existing.description,
+      fileType: req.body.fileType ?? existing.fileType,
+      file: filePath,
+      previewImage: previewImagePath,
+      fileName: fileName,
+    };
+
+    writeJSON("downloadables.json", downloadables);
+    res.json(downloadables[idx]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error al actualizar descargable" });
+  }
+});
+
+app.delete("/api/downloadables/:id", requireAdmin, (req, res) => {
+  try {
+    const downloadables = readJSON("downloadables.json");
+    const item = downloadables.find((d) => d.id === req.params.id);
+    
+    if (!item) {
+      return res.status(404).json({ message: "Descargable no encontrado" });
+    }
+    
+    const deleteFile = (relativePath) => {
+      if (relativePath && !relativePath.includes("placeholder.jpg") && !relativePath.startsWith("http")) {
+        const fullPath = path.join(__dirname, relativePath);
+        console.log(`[Delete] Checking file existence for: ${fullPath}`);
+        if (fs.existsSync(fullPath)) {
+          try {
+            fs.unlinkSync(fullPath);
+            console.log(`[Delete] Successfully deleted file: ${fullPath}`);
+          } catch (e) {
+            console.error(`[Delete] Error deleting file ${fullPath}:`, e);
+          }
+        } else {
+          console.log(`[Delete] File not found on disk: ${fullPath}`);
+        }
+      }
+    };
+    
+    deleteFile(item.file);
+    deleteFile(item.previewImage);
+    
+    const filtered = downloadables.filter((d) => d.id !== req.params.id);
+    writeJSON("downloadables.json", filtered);
+    res.json({ message: "Descargable eliminado correctamente" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error al eliminar descargable" });
+  }
+});
+
+// ══════════════════════════════════════════════
 // EMAIL ROUTES
 // ══════════════════════════════════════════════
 

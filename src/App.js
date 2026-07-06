@@ -9,6 +9,7 @@ import Store from "./pages/Store";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import AdminPanel from "./pages/AdminPanel";
+import Descargables from "./pages/Descargables";
 import "./styles.css";
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
                   <Route path="/tienda" element={<Store />} />
                   <Route path="/journal" element={<Blog />} />
                   <Route path="/journal/:id" element={<BlogPost />} />
+                  <Route path="/descargables" element={<Descargables />} />
                 </Routes>
                 <Footer />
               </>

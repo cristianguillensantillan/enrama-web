@@ -2,7 +2,7 @@
   {
     "id": "3",
     "name": "Butaca - Yarey I",
-    "price": "RD$ 32,000.00",
+    "price": "US $750.00",
     "image": "/uploads/1783028102205-442965977.jpeg",
     "images": [
       "/uploads/1783028102211-303509905.jpeg",
@@ -18,24 +18,24 @@
       {
         "icon": "/uploads/1783028458539-272457034.jpeg",
         "name": "Jequitiva",
-        "price": "RD$ 32,000.00"
+        "price": "US $750.00"
       },
       {
         "icon": "/uploads/1783028458540-744601465.jpeg",
         "name": "Caoba Africana",
-        "price": "RD$ 37,500.00"
+        "price": "US $850.00"
       },
       {
         "icon": "/uploads/1783028458541-481240332.jpeg",
         "name": "Roble Brasileño",
-        "price": "RD$ 38,000.00"
+        "price": "US $900.00"
       }
     ]
   },
   {
     "id": "2",
     "name": "Silla - Yarey II",
-    "price": "RD$ 24,000.00",
+    "price": "US $450.00",
     "image": "/uploads/1783028440100-615320738.jpeg",
     "images": [
       "/uploads/1783028440106-349928850.jpeg",
@@ -51,24 +51,24 @@
       {
         "icon": "/uploads/1783028440123-920466940.jpeg",
         "name": "Jequitiva",
-        "price": "RD$ 24,000.00"
+        "price": "US $450.00"
       },
       {
         "icon": "/uploads/1783028440126-192325954.jpeg",
         "name": "Caoba Africana",
-        "price": "RD$ 27,100.00"
+        "price": "US $500.00"
       },
       {
         "icon": "/uploads/1783028440128-207827203.jpeg",
         "name": "Roble Brasileño",
-        "price": "RD$ 29,000.00"
+        "price": "US $535.00"
       }
     ]
   },
   {
     "id": "1",
     "name": "Mecedora - Yarey III",
-    "price": "RD$ 37,000.00",
+    "price": "US $785.00",
     "image": "/uploads/1783028696469-943782473.jpeg",
     "images": [
       "/uploads/1783028696473-941913781.jpeg",
@@ -83,17 +83,17 @@
       {
         "icon": "/uploads/1783028696487-169069236.jpeg",
         "name": "Jequitiba",
-        "price": "RD$ 37,000.00"
+        "price": "US $785.00"
       },
       {
         "icon": "/uploads/1783028696490-319329995.jpeg",
         "name": "Caoba Africana",
-        "price": "RD$ 41,000.00"
+        "price": "US $865.00"
       },
       {
         "icon": "/uploads/1783028696493-228615672.jpeg",
         "name": "Roble Brasileño",
-        "price": "RD$ 42,000.00"
+        "price": "US $985.00"
       }
     ],
     "createdAt": "2024-01-01T00:00:00.000Z"

@@ -18,6 +18,7 @@ export default function Header() {
     { to: "/", label: "Inicio" },
     { to: "/tienda", label: "Tienda" },
     { to: "/journal", label: "Journal" },
+    { to: "/descargables", label: "Descargables" },
   ];
 
   return (
