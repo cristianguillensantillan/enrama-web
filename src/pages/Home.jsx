@@ -57,6 +57,9 @@ export default function Home() {
                   style={{ cursor: "pointer" }}
                 >
                   <div className="product-card-img">
+                    {product.useLaunchPrice && (
+                      <span className="launch-badge">Precio de lanzamiento</span>
+                    )}
                     <img
                       src={resolveImg(product.image)}
                       alt={product.name}
@@ -65,7 +68,16 @@ export default function Home() {
                   </div>
                   <div className="product-card-body">
                     <h3>{product.name}</h3>
-                    <p className="product-price">Desde {product.price}</p>
+                    <p className="product-price">
+                      {product.useLaunchPrice && product.launchPrice ? (
+                        <>
+                          <span className="product-price-launch">{product.launchPrice}</span>
+                          <span className="product-price-original strikethrough">{product.price}</span>
+                        </>
+                      ) : (
+                        `Desde ${product.price}`
+                      )}
+                    </p>
                     <button
                       className="btn-order"
                       style={{ width: "100%" }}
