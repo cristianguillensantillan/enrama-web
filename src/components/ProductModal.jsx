@@ -46,9 +46,6 @@ export default function ProductModal({ product, onClose, onOrder }) {
       <div className="modal-box" onClick={(e) => e.stopPropagation()}>
         {/* Left: Image carousel */}
         <div className="modal-carousel">
-          {product.useLaunchPrice && imgIdx === 0 && (
-            <span className="launch-badge">Precio de lanzamiento</span>
-          )}
           <img
             src={resolveImg(images[imgIdx])}
             alt={product.name}

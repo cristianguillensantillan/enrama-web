@@ -527,6 +527,12 @@ button {
   z-index: 15;
 }
 
+@media (max-width: 768px) {
+  .about-badge {
+    display: none;
+  }
+}
+
 .about-text {
   display: flex;
   flex-direction: column;
