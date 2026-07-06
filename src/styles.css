@@ -2484,7 +2484,7 @@ button {
 
 .launch-badge {
   position: absolute;
-  bottom: 16px;
+  top: 16px;
   right: 16px;
   background: var(--clr-accent);
   color: white;
