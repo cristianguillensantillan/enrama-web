@@ -527,7 +527,7 @@ button {
   z-index: 15;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .about-badge {
     display: none;
   }
