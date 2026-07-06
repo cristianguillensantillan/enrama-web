@@ -114,10 +114,20 @@ app.post("/api/products", requireAdmin, upload.fields([
     const woodPrice2 = req.body.woodPrice2 || "";
     const woodPrice3 = req.body.woodPrice3 || "";
 
+    const woodLaunchPrice1 = req.body.woodLaunchPrice1 || "";
+    const woodLaunchPrice2 = req.body.woodLaunchPrice2 || "";
+    const woodLaunchPrice3 = req.body.woodLaunchPrice3 || "";
+
     const colors = [];
-    if (colorIcon1 || woodName1 || woodPrice1) colors.push({ icon: colorIcon1, name: woodName1, price: woodPrice1 });
-    if (colorIcon2 || woodName2 || woodPrice2) colors.push({ icon: colorIcon2, name: woodName2, price: woodPrice2 });
-    if (colorIcon3 || woodName3 || woodPrice3) colors.push({ icon: colorIcon3, name: woodName3, price: woodPrice3 });
+    if (colorIcon1 || woodName1 || woodPrice1 || woodLaunchPrice1) {
+      colors.push({ icon: colorIcon1, name: woodName1, price: woodPrice1, launchPrice: woodLaunchPrice1 });
+    }
+    if (colorIcon2 || woodName2 || woodPrice2 || woodLaunchPrice2) {
+      colors.push({ icon: colorIcon2, name: woodName2, price: woodPrice2, launchPrice: woodLaunchPrice2 });
+    }
+    if (colorIcon3 || woodName3 || woodPrice3 || woodLaunchPrice3) {
+      colors.push({ icon: colorIcon3, name: woodName3, price: woodPrice3, launchPrice: woodLaunchPrice3 });
+    }
 
     const newProduct = {
       id: Date.now().toString(),
@@ -209,6 +219,12 @@ app.put("/api/products/:id", requireAdmin, upload.fields([
       return val.price || "";
     };
 
+    const getExistingLaunchPrice = (val) => {
+      if (!val) return "";
+      if (typeof val === 'string') return "";
+      return val.launchPrice || "";
+    };
+
     const colorIcon1 = req.files?.colorIcon1?.[0]?.filename
       ? `/uploads/${req.files.colorIcon1[0].filename}`
       : getExistingIcon(existingColors[0]);
@@ -227,10 +243,20 @@ app.put("/api/products/:id", requireAdmin, upload.fields([
     const woodPrice2 = req.body.woodPrice2 !== undefined ? req.body.woodPrice2 : getExistingPrice(existingColors[1]);
     const woodPrice3 = req.body.woodPrice3 !== undefined ? req.body.woodPrice3 : getExistingPrice(existingColors[2]);
 
+    const woodLaunchPrice1 = req.body.woodLaunchPrice1 !== undefined ? req.body.woodLaunchPrice1 : getExistingLaunchPrice(existingColors[0]);
+    const woodLaunchPrice2 = req.body.woodLaunchPrice2 !== undefined ? req.body.woodLaunchPrice2 : getExistingLaunchPrice(existingColors[1]);
+    const woodLaunchPrice3 = req.body.woodLaunchPrice3 !== undefined ? req.body.woodLaunchPrice3 : getExistingLaunchPrice(existingColors[2]);
+
     const colors = [];
-    if (colorIcon1 || woodName1 || woodPrice1) colors.push({ icon: colorIcon1, name: woodName1, price: woodPrice1 });
-    if (colorIcon2 || woodName2 || woodPrice2) colors.push({ icon: colorIcon2, name: woodName2, price: woodPrice2 });
-    if (colorIcon3 || woodName3 || woodPrice3) colors.push({ icon: colorIcon3, name: woodName3, price: woodPrice3 });
+    if (colorIcon1 || woodName1 || woodPrice1 || woodLaunchPrice1) {
+      colors.push({ icon: colorIcon1, name: woodName1, price: woodPrice1, launchPrice: woodLaunchPrice1 });
+    }
+    if (colorIcon2 || woodName2 || woodPrice2 || woodLaunchPrice2) {
+      colors.push({ icon: colorIcon2, name: woodName2, price: woodPrice2, launchPrice: woodLaunchPrice2 });
+    }
+    if (colorIcon3 || woodName3 || woodPrice3 || woodLaunchPrice3) {
+      colors.push({ icon: colorIcon3, name: woodName3, price: woodPrice3, launchPrice: woodLaunchPrice3 });
+    }
 
     products[idx] = {
       ...existing,

@@ -9,7 +9,18 @@ export default function OrderModal({ product, onClose }) {
   const getWoodInfo = (val) => {
     if (!val) return null;
     if (typeof val === 'string') return null;
-    if (val.name) return { icon: val.icon || null, name: val.name, price: val.price || product?.price };
+    if (val.name) {
+      const normalPrice = val.price || product?.price;
+      const launchPrice = val.launchPrice || normalPrice;
+      const resolvedPrice = product?.useLaunchPrice ? launchPrice : normalPrice;
+      return { 
+        icon: val.icon || null, 
+        name: val.name, 
+        price: resolvedPrice,
+        originalPrice: normalPrice,
+        hasLaunchPrice: !!val.launchPrice
+      };
+    }
     return null;
   };
 
@@ -141,10 +152,20 @@ export default function OrderModal({ product, onClose }) {
               Estás ordenando: <strong>{product.name}</strong> —{" "}
               <strong style={{ color: "var(--clr-accent)" }}>
                 Desde {activePrice}
-                {product.useLaunchPrice && product.launchPrice && !selectedWoodObj?.price && (
-                  <span className="order-price-original strikethrough" style={{ marginLeft: "8px", fontSize: "0.85em", color: "var(--clr-tan)", textDecoration: "line-through", fontWeight: "normal" }}>
-                    {product.price}
-                  </span>
+                {product.useLaunchPrice && (
+                  selectedWoodObj ? (
+                    selectedWoodObj.hasLaunchPrice && (
+                      <span className="order-price-original strikethrough" style={{ marginLeft: "8px", fontSize: "0.85em", color: "var(--clr-tan)", textDecoration: "line-through", fontWeight: "normal" }}>
+                        {selectedWoodObj.originalPrice}
+                      </span>
+                    )
+                  ) : (
+                    product.launchPrice && (
+                      <span className="order-price-original strikethrough" style={{ marginLeft: "8px", fontSize: "0.85em", color: "var(--clr-tan)", textDecoration: "line-through", fontWeight: "normal" }}>
+                        {product.price}
+                      </span>
+                    )
+                  )
                 )}
               </strong>
             </p>

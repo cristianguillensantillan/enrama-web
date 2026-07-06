@@ -79,6 +79,10 @@ function ProductForm({ product, onSave, onCancel }) {
   const [woodPrice2, setWoodPrice2] = useState("");
   const [woodPrice3, setWoodPrice3] = useState("");
 
+  const [woodLaunchPrice1, setWoodLaunchPrice1] = useState("");
+  const [woodLaunchPrice2, setWoodLaunchPrice2] = useState("");
+  const [woodLaunchPrice3, setWoodLaunchPrice3] = useState("");
+
   useEffect(() => {
     if (product?.colors) {
       const getWoodName = (val) => {
@@ -91,6 +95,11 @@ function ProductForm({ product, onSave, onCancel }) {
         if (typeof val === 'string') return "";
         return val.price || "";
       };
+      const getWoodLaunchPrice = (val) => {
+        if (!val) return "";
+        if (typeof val === 'string') return "";
+        return val.launchPrice || "";
+      };
       setWoodName1(getWoodName(product.colors[0]));
       setWoodName2(getWoodName(product.colors[1]));
       setWoodName3(getWoodName(product.colors[2]));
@@ -98,6 +107,10 @@ function ProductForm({ product, onSave, onCancel }) {
       setWoodPrice1(getWoodPrice(product.colors[0]));
       setWoodPrice2(getWoodPrice(product.colors[1]));
       setWoodPrice3(getWoodPrice(product.colors[2]));
+
+      setWoodLaunchPrice1(getWoodLaunchPrice(product.colors[0]));
+      setWoodLaunchPrice2(getWoodLaunchPrice(product.colors[1]));
+      setWoodLaunchPrice3(getWoodLaunchPrice(product.colors[2]));
     } else {
       setWoodName1("");
       setWoodName2("");
@@ -105,6 +118,9 @@ function ProductForm({ product, onSave, onCancel }) {
       setWoodPrice1("");
       setWoodPrice2("");
       setWoodPrice3("");
+      setWoodLaunchPrice1("");
+      setWoodLaunchPrice2("");
+      setWoodLaunchPrice3("");
     }
   }, [product]);
 
@@ -139,6 +155,10 @@ function ProductForm({ product, onSave, onCancel }) {
     fd.append("woodPrice1", woodPrice1);
     fd.append("woodPrice2", woodPrice2);
     fd.append("woodPrice3", woodPrice3);
+
+    fd.append("woodLaunchPrice1", woodLaunchPrice1);
+    fd.append("woodLaunchPrice2", woodLaunchPrice2);
+    fd.append("woodLaunchPrice3", woodLaunchPrice3);
 
     const result = await onSave(fd);
     if (!result.ok) setError(result.message || "Error al guardar");
@@ -214,6 +234,8 @@ function ProductForm({ product, onSave, onCancel }) {
                 const setName = [setWoodName1, setWoodName2, setWoodName3][idx];
                 const priceVal = [woodPrice1, woodPrice2, woodPrice3][idx];
                 const setPrice = [setWoodPrice1, setWoodPrice2, setWoodPrice3][idx];
+                const launchPriceVal = [woodLaunchPrice1, woodLaunchPrice2, woodLaunchPrice3][idx];
+                const setLaunchPrice = [setWoodLaunchPrice1, setWoodLaunchPrice2, setWoodLaunchPrice3][idx];
 
                 return (
                   <div key={idx} className="admin-color-col">
@@ -255,6 +277,16 @@ function ProductForm({ product, onSave, onCancel }) {
                         placeholder="Ej: $37,000.00"
                         value={priceVal}
                         onChange={(e) => setPrice(e.target.value)} 
+                      />
+                    </div>
+
+                    <div className="admin-file-input-group">
+                      <label>Precio de lanzamiento (Madera)</label>
+                      <input 
+                        type="text" 
+                        placeholder="Ej: $35,000.00"
+                        value={launchPriceVal}
+                        onChange={(e) => setLaunchPrice(e.target.value)} 
                       />
                     </div>
                   </div>
