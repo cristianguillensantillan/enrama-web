@@ -13,9 +13,6 @@ export default function ProductCard({ product, onDetails, onOrder }) {
   return (
     <div className="product-card">
       <div className="product-card-img" onClick={() => onDetails(product)}>
-        {product.featured && (
-          <span className="product-badge">Destacado</span>
-        )}
         {product.useLaunchPrice && (
           <span className="launch-badge">Precio de lanzamiento</span>
         )}
