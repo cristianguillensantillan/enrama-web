@@ -18,19 +18,24 @@
       {
         "icon": "/uploads/1783028458539-272457034.jpeg",
         "name": "Jequitiva",
-        "price": "US $750.00"
+        "price": "US $750.00",
+        "launchPrice": "US $545.00"
       },
       {
         "icon": "/uploads/1783028458540-744601465.jpeg",
         "name": "Caoba Africana",
-        "price": "US $850.00"
+        "price": "US $850.00",
+        "launchPrice": "US $640.00"
       },
       {
         "icon": "/uploads/1783028458541-481240332.jpeg",
         "name": "Roble Brasileño",
-        "price": "US $900.00"
+        "price": "US $900.00",
+        "launchPrice": "US $650.00"
       }
-    ]
+    ],
+    "launchPrice": "US $545.00",
+    "useLaunchPrice": true
   },
   {
     "id": "2",
@@ -51,19 +56,24 @@
       {
         "icon": "/uploads/1783028440123-920466940.jpeg",
         "name": "Jequitiva",
-        "price": "US $450.00"
+        "price": "US $450.00",
+        "launchPrice": "US $410.00"
       },
       {
         "icon": "/uploads/1783028440126-192325954.jpeg",
         "name": "Caoba Africana",
-        "price": "US $500.00"
+        "price": "US $500.00",
+        "launchPrice": "US $460.00"
       },
       {
         "icon": "/uploads/1783028440128-207827203.jpeg",
         "name": "Roble Brasileño",
-        "price": "US $535.00"
+        "price": "US $535.00",
+        "launchPrice": "US $495.00"
       }
-    ]
+    ],
+    "launchPrice": "US $410.00",
+    "useLaunchPrice": true
   },
   {
     "id": "1",
@@ -83,19 +93,24 @@
       {
         "icon": "/uploads/1783028696487-169069236.jpeg",
         "name": "Jequitiba",
-        "price": "US $785.00"
+        "price": "US $785.00",
+        "launchPrice": "US $630.00"
       },
       {
         "icon": "/uploads/1783028696490-319329995.jpeg",
         "name": "Caoba Africana",
-        "price": "US $865.00"
+        "price": "US $865.00",
+        "launchPrice": "US $695.00"
       },
       {
         "icon": "/uploads/1783028696493-228615672.jpeg",
         "name": "Roble Brasileño",
-        "price": "US $985.00"
+        "price": "US $985.00",
+        "launchPrice": "US $715.00"
       }
     ],
-    "createdAt": "2024-01-01T00:00:00.000Z"
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "launchPrice": "US $630.00",
+    "useLaunchPrice": true
   }
 ]
